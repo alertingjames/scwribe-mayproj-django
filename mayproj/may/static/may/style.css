@@ -1,0 +1,108 @@
+body, div, p {
+    margin: 0;
+    padding: 0;
+    font-size: 15px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.navbar-brand{
+    font-family: 'Satisfy', Apple Chancery, cursive ;
+    font-weight:800;
+}
+
+.my_items{
+    color: white;
+    margin: 30px;
+}
+
+.radio{ width: 25px; height: 25px; }
+
+.home_welcome{
+    color: red;
+}
+
+.navbar{
+     position: fixed;
+     top: 0;
+     left: 0;
+     z-index: 9999;
+     width: 100%;
+     border-radius: 0px;
+}
+
+.panel-body{
+    background: white url("images/pattern3.jpg");
+    background-size:100%,100%;
+}
+
+.panel{
+    background: white url("images/pattern3.jpg");
+    background-size:100%,100%;
+}
+
+.thumbnail{
+    background: white url("images/pattern3.jpg");
+    background-size:100%,100%;
+}
+
+.album_title{
+    color: black;
+    font-family: verdana;
+    font-size: 200%;
+}
+
+.song{
+
+    font-family: verdana;
+    font-size: 100%;
+}
+.album_artist{
+    color: black;
+    font-size: 160%;
+    font-family: 'Satisfy', cursive;
+}
+
+.jumbotron {
+  margin-bottom: 0px;
+  height: 350px;
+  color: white;
+  text-shadow: black 0.3em 0.3em 0.3em;
+  background:transparent;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

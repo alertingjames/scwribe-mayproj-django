@@ -1,0 +1,466 @@
+{% extends 'may/basehome.html' %}
+{% block title %}Homepage{% endblock %}
+{% block body %}
+
+<br>
+<br>
+<br>
+<style>
+
+html, body{
+  background: linear-gradient(0deg,rgba(20,150,250,0.3),rgba(0,100,250,0.0)), url("/static/may/images/originalbackground.jpg") no-repeat center center fixed;
+  background-size:cover;
+}
+
+img {
+  border-radius: 50%;
+  height: 100px;
+  width: 100px;
+}
+
+form h1 {
+  font-size: 30px;
+  color: red;
+  font-weight:800;
+  padding: 19px 22px;
+  border-radius: 5px 5px 0px 0px;
+  margin: auto;
+  text-shadow: none;
+  text-align:middle;
+}
+
+#edit {
+  border-radius: 5px;
+  max-width:500px;
+  width:auto;
+  height:auto;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left:auto;
+  margin-right:auto;
+  <!--background:linear-gradient(30deg,rgba(200,150,250,0.7),rgba(50,200,250,0.7));-->
+  opacity:0.9;
+  overflow: hidden;
+  <!--box-shadow: 25px 25px 0 rgba(0, 0, 0, 0.2);-->
+}
+#edit:hover {
+  <!--background:linear-gradient(0deg,rgba(200,50,250,0.7),rgba(50,200,250,0.7));-->
+}
+
+h1 {
+  text-align:center;
+  color: red;
+  text-shadow: 1px 1px 0px #FFF;
+  margin:50px 0px 0px 0px
+}
+
+input {
+  border-radius: 0px 50px 50px 0px;
+  border: 1px solid #eee;
+  margin-bottom: 15px;
+  margin-right:auto;
+  width: 92%;
+  height: 42px;
+  float: middle;
+  padding: 0px 15px;
+  opacity: 0.8;
+  color:blue;
+}
+
+.form-group {
+  overflow: hidden;
+  width:100%;
+}
+
+.icon-case {
+  width: 8%;
+  float: left;
+  border-radius: 5px 0px 0px 5px;
+  background:green;
+  height:42px;
+  position: relative;
+  text-align: center;
+  line-height:40px;
+  padding-top:11px;
+}
+
+i {
+  color:yellow;
+}
+
+.contentform {
+  padding: 30px;
+  float:middle;
+  margin:auto;
+}
+
+.formcontent {
+  width:100%;
+  float:middle;
+  margin:auto;
+  <!--border-right: 1px dotted #CCC;-->
+  box-sizing: border-box;
+  padding: 0px 0px 0px 0px;
+}
+
+</style>
+
+<script>
+	history.pushState(null, null, location.href);
+	window.onpopstate = function () {
+        history.go(1);
+    };
+</script>
+
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--<meta name="mobile-web-app-capable" content="yes">-->
+<!--<meta name="apple-mobile-web-app-capable" content="yes">-->
+<link rel="stylesheet" href="../lib/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!--<script src="/static/may/js/sinch.min.js"></script>-->
+
+<!--<script>-->
+  <!--function launchFullScreen(element) {-->
+  <!--if(element.requestFullScreen) {-->
+    <!--element.requestFullScreen();-->
+  <!--} else if(element.mozRequestFullScreen) {-->
+    <!--element.mozRequestFullScreen();-->
+  <!--} else if(element.webkitRequestFullScreen) {-->
+    <!--element.webkitRequestFullScreen();-->
+  <!--}-->
+<!--}-->
+
+<!--// Launch fullscreen for browsers that support it!-->
+<!--launchFullScreen(document.documentElement); // the whole page-->
+<!--</script>-->
+
+<div style="position:fixed; left:50%; float:middle; border-radius: 1px; background:white; padding:10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+	transform:translate(-50%, -50%); width:200px; z-index:150; top:220px; text-align:center; display: none;" id="progressbar">
+	<img src="/static/may/images/processing.gif" style="width:auto;">
+	<div style="font-size:16px; font-weight:500; color:black; margin:0px 15px 10px 15px;">Please wait</div>
+</div>
+
+<img src="/static/may/images/logo.png" style="position:relative; width:60px; height:60px; border-radius:50%; z-index:100; left:3%; margin-top:1%;">
+
+<div onclick="showAlert()" id="alert" style="font-size:16px; font-weight:300; color: black; text-align:center; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+	position:fixed; left:50%; float:middle; background-color:white; border-radius:10px; padding: 5px 10px 5px 10px;
+	transform:translate(-50%, -50%); width:200px; z-index:100; top:260px; display:none;"><i class="fa fa-bell" style="font-size:18px; color:red;"></i>
+	You have message!<br>
+	Click here to contact it.
+</div>
+
+<div onclick="" id="callmoral" style="font-size:16px; font-weight:300; color: black; text-align:center; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+	position:fixed; left:50%; float:middle; background-color:white; border-radius:10px; padding: 5px 10px 5px 10px;
+	transform:translate(-50%, -50%); width:300px; z-index:200; top:260px; display:none;">
+	<div style="width:100%; display:inline-block;">
+		<i class="fa fa-bell" style="float:left; font-size:18px; color:red; margin-right:5px;"></i>
+		<div id="callLog" style="color:black; padding:10px; font-size:12px; text-align:left;"></div>
+	</div>
+	<div id="call">
+		<form id="newCall" style="padding:5px;">
+			<button id="hangup" style="border:0px; background:white;">Hangup</button>
+			<button id="answer" style="margin-left:20px; border-radius:5px; border:0px; color:white; background:#666633; padding:5px 10px 5px 10px;">Respond</button>
+			<div hidden>
+				<audio id="incoming" autoplay></audio>
+				<audio id="ringback" src='/static/may/style/ringback.wav' loop></audio>
+				<audio id="ringtone" src='/static/may/style/phone_ring.wav' loop></audio>
+			</div>
+		</form>
+	</div>
+</div>
+
+{% if profile %}
+<form id="profile-panel" action="#" method="post" style="font-size:16px; font-weight:300; color: black; box-shadow: 0px 0px 100px rgba(0, 0, 0, 1.0);
+	position:fixed; left:50%; float:middle; background-color:white; border-radius:10px; padding: 8px 15px 15px 15px;
+	transform:translate(-50%, -50%); width:400px; z-index:200; top:350px;">
+    {% csrf_token %}
+    <img src="/static/may/images/cancel.png" style="width:25px; height:25px; float:right; margin-top:5px;" onclick="javascript:document.getElementById('profile-panel').style.display='none';">
+    <div style="font-size:20px; margin-top:10px;"><i class="fa fa-user" style="font-size:25px; color:green; padding-right:10px;"></i>My Profile</div>
+	<div style="width:100%; text-align:center;">
+        <div style="margin-top:15px;">
+            <span class="icon-case"><i class="fa fa-user"></i></span>
+            <input type="text" style="width:92%; border-radius:0px 5px 5px 0px; margin-bottom:5px;" required id="name" name="name" value="{{me.name}}">
+        </div>
+        <div>
+            <span class="icon-case"><i class="fa fa-envelope-o"></i></span>
+            <input type="text" style="width:92%; border-radius:0px 5px 5px 0px; margin-bottom:5px;" required id="email" name="email" value="{{me.email}}" readonly>
+        </div>
+        <div style="margin-top:5px;">
+            <span class="icon-case"><i class="fa fa-lock"></i></span>
+            <input type="text" style="width:92%; border-radius:0px 5px 5px 0px; margin-bottom:5px;" required id="pwd" name="password" value="{{me.password}}">
+        </div>
+		{% if me.company %}
+        <div style="margin-top:5px;">
+            <span class="icon-case"><i class="fa fa-building"></i></span>
+            <input type="text" style="width:92%; border-radius:0px 5px 5px 0px; margin-bottom:5px;" required id="company" name="company" value="{{me.company}}">
+        </div>
+		{% endif %}
+    </div>
+    <button style="margin-top:15px; width:100%; text-align:center; padding:8px; border:0px;
+        border-radius:5px; background:#0066cc; color:white; font-size:14px; display:none;">Update</button>
+</form>
+{% endif %}
+
+  <form id="edit" action="#" method="post" enctype="multipart/form-data">
+	  {% csrf_token %}
+	    <h1>Welcome!</h1>
+
+    <div class="contentform">
+		<div class="formcontent">
+            <div class="form-group" style="width:auto; margin-bottom:20px;">
+				<input type="hidden" id="user_id" value="{{me.id}}">
+				<input type="hidden" id="username" value="{{me.email}}">
+				<input type="hidden" id="password" value="{{me.password}}">
+				<input type="hidden" id="callreg" value="{{me.callreg}}">
+				<center>
+					<a href="/users">
+						<img src="/static/may/images/usericon.png"
+							 style="max-width:200px; width:auto; height:auto; max-height:200px; margin-bottom:10px; border-radius: 5%; margin-right:20px; margin-left:10px;">
+					</a>
+				</center>
+            </div>
+	    </div>
+	</div>
+</form>
+<script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyABrC1jUQMjJmZJ2p8lnwiECcuKgZeGA7g",
+    authDomain: "scwribe.firebaseapp.com",
+    databaseURL: "https://scwribe.firebaseio.com",
+    projectId: "scwribe",
+    storageBucket: "",
+    messagingSenderId: "915253554092"
+  };
+  firebase.initializeApp(config);
+</script>
+
+<script src="/static/may/js/noti_alert.js"></script>
+<!--<script src="/static/may/js/call.js"></script>-->
+<script>
+	function showAlert(){
+		window.location.href = "/get_notifications";
+	}
+</script>
+
+<!--<script>-->
+<!--var username = document.getElementById("username").value;-->
+<!--var password = document.getElementById("password").value;-->
+<!--var callreg = document.getElementById("callreg").value;-->
+<!--var callmoral = document.getElementById("callmoral");-->
+<!--var progressbar = document.getElementById("progressbar");-->
+<!--var calllog = document.getElementById("callLog");-->
+<!--progressbar.style.display = "block";-->
+
+<!--var global_username = '';-->
+
+<!--/*** Set up sinchClient ***/-->
+
+<!--sinchClient = new SinchClient({-->
+	<!--applicationKey: '95ac1dd6-a709-48ab-b977-fbdaeccbf1d6',-->
+	<!--capabilities: {calling: true},-->
+	<!--startActiveConnection: true, /* NOTE: This is required if application is to receive calls / instant messages. */-->
+	<!--//Note: For additional loging, please uncomment the three rows below-->
+	<!--onLogMessage: function(message) {-->
+		<!--console.log(message);-->
+	<!--},-->
+<!--});-->
+
+
+<!--/*** Name of session, can be anything. ***/-->
+
+<!--var sessionName = 'sinchSessionWEB-' + sinchClient.applicationKey;-->
+
+
+<!--/*** Check for valid session. NOTE: Deactivated by default to allow multiple browser-tabs with different users. ***/-->
+
+<!--var sessionObj = JSON.parse(localStorage[sessionName] || '{}');-->
+<!--if(false && sessionObj.userId) {-->
+	<!--sinchClient.start(sessionObj)-->
+		<!--.then(function() {-->
+			<!--global_username = sessionObj.userId;-->
+			<!--localStorage[sessionName] = JSON.stringify(sinchClient.getSession());-->
+			<!--progressbar.style.display = "none";-->
+		<!--})-->
+		<!--.fail(function() {-->
+			<!--//No valid session, take suitable action, such as prompting for username/password, then start sinchClient again with login object-->
+			<!--login();-->
+		<!--});-->
+<!--}-->
+<!--else {-->
+	<!--login();-->
+<!--}-->
+
+<!--function login(){-->
+	<!--if(callreg == '1') loginUser();-->
+	<!--else createUser();-->
+<!--}-->
+
+<!--/*** Create user and start sinch for that user and save session in localStorage ***/-->
+<!--function createUser(){-->
+    <!--var signUpObj = {};-->
+	<!--signUpObj.username = username;-->
+	<!--signUpObj.password = password;-->
+
+	<!--//Use Sinch SDK to create a new user-->
+	<!--sinchClient.newUser(signUpObj, function(ticket) {-->
+		<!--//On success, start the client-->
+		<!--sinchClient.start(ticket, function() {-->
+			<!--global_username = signUpObj.username;-->
+			<!--//On success-->
+			<!--calllogout();-->
+			<!--window.location.href = "/calllogin";-->
+			<!--//Store session & manage in some way (optional)-->
+			<!--localStorage[sessionName] = JSON.stringify(sinchClient.getSession());-->
+		<!--}).fail(handleError);-->
+	<!--}).fail(handleError);-->
+<!--}-->
+
+<!--/*** Login user and save session in localStorage ***/-->
+
+<!--function loginUser(){-->
+	<!--var signInObj = {};-->
+	<!--signInObj.username = username;-->
+	<!--signInObj.password = password;-->
+
+	<!--//Use Sinch SDK to authenticate a user-->
+	<!--sinchClient.start(signInObj, function() {-->
+		<!--global_username = signInObj.username;-->
+		<!--//On success, show the UI-->
+		<!--progressbar.style.display = "none";-->
+		<!--//Store session & manage in some way (optional)-->
+		<!--localStorage[sessionName] = JSON.stringify(sinchClient.getSession());-->
+	<!--}).fail(handleError);-->
+<!--}-->
+
+
+<!--/*** Define listener for managing calls ***/-->
+
+<!--var callListeners = {-->
+	<!--onCallProgressing: function(call) {-->
+		<!--$('audio#ringback').prop("currentTime", 0);-->
+		<!--$('audio#ringback').trigger("play");-->
+
+		<!--//Report call stats-->
+	<!--//	$('div#callLog').append('<div id="stats">Ringing...</div>');-->
+	<!--},-->
+	<!--onCallEstablished: function(call) {-->
+		<!--$('audio#incoming').attr('src', call.incomingStreamURL);-->
+		<!--$('audio#ringback').trigger("pause");-->
+		<!--$('audio#ringtone').trigger("pause");-->
+
+		<!--//Report call stats-->
+		<!--var callDetails = call.getDetails();-->
+<!--//		$('div#callLog').append('<div id="stats">Answered at: '+(callDetails.establishedTime)+'</div>');-->
+	<!--},-->
+	<!--onCallEnded: function(call) {-->
+		<!--$('audio#ringback').trigger("pause");-->
+		<!--$('audio#ringtone').trigger("pause");-->
+		<!--$('audio#incoming').attr('src', '');-->
+
+		<!--$('button').removeClass('incall');-->
+		<!--$('button').removeClass('callwaiting');-->
+
+		<!--//Report call stats-->
+		<!--var callDetails = call.getDetails();-->
+		<!--callmoral.style.display = "none";-->
+		<!--if(call.error) {-->
+			<!--alert('Failure message: '+call.error.message);-->
+		<!--}else alert(call.getEndCause());-->
+	<!--}-->
+<!--}-->
+
+<!--/*** Set up callClient and define how to handle incoming calls ***/-->
+
+<!--var callClient = sinchClient.getCallClient();-->
+<!--callClient.initStream().then(function() {-->
+	<!--// Directly init streams, in order to force user to accept use of media sources at a time we choose-->
+<!--});-->
+<!--var call;-->
+
+<!--callClient.addEventListener({-->
+  <!--onIncomingCall: function(incomingCall) {-->
+	<!--//Play some groovy tunes-->
+	<!--$('audio#ringtone').prop("currentTime", 0);-->
+	<!--$('audio#ringtone').trigger("play");-->
+
+	<!--//Print statistics-->
+	<!--calllog.innerHTML = 'Incoming call from ' + incomingCall.fromId;-->
+    <!--callmoral.style.display = "block";-->
+	<!--//Manage the call object-->
+    <!--call = incomingCall;-->
+    <!--call.addEventListener(callListeners);-->
+  <!--}-->
+<!--});-->
+
+<!--$('button#answer').click(function(event) {-->
+	<!--event.preventDefault();-->
+	<!--try {-->
+		<!--call.answer();-->
+		<!--callmoral.style.display = "none";-->
+	<!--}-->
+	<!--catch(error) {-->
+		<!--handleError(error);-->
+	<!--}-->
+<!--});-->
+
+
+<!--/*** Hang up a call ***/-->
+
+<!--$('button#hangup').click(function(event) {-->
+	<!--event.preventDefault();-->
+	<!--console.info('Will request hangup..');-->
+	<!--callmoral.style.display = "none";-->
+	<!--call && call.hangup();-->
+<!--});-->
+
+<!--/*** Log out user ***/-->
+
+<!--function calllogout(){-->
+	<!--//Stop the sinchClient-->
+	<!--sinchClient.terminate();-->
+	<!--//Note: sinchClient object is now considered stale. Instantiate new sinchClient to reauthenticate, or reload the page.-->
+
+	<!--//Remember to destroy / unset the session info you may have stored-->
+	<!--delete localStorage[sessionName];-->
+
+	<!--//Reload page.-->
+<!--//	window.location.reload();-->
+<!--}-->
+
+
+<!--/*** Handle errors, report them and re-enable UI ***/-->
+
+<!--var handleError = function(error) {-->
+	<!--progressbar.style.display = "none";-->
+	<!--alert(error.message);-->
+<!--}-->
+
+<!--/** Chrome check for file - This will warn developers of using file: protocol when testing WebRTC **/-->
+<!--if(location.protocol == 'file:' && navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {-->
+	<!--$('div#chromeFileWarning').show();-->
+<!--}-->
+
+<!--$('button').prop('disabled', false); //Solve Firefox issue, ensure buttons always clickable after load-->
+<!--</script>-->
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

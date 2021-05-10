@@ -1,0 +1,44 @@
+<html>
+  <head>
+     <script src="/static/may/js/chrome.min.js"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script>
+      function start() {
+        // Initializes the client with the API key and the Translate API.
+        gapi.client.init({
+          'apiKey': 'AIzaSyDFZqN95OWA8TYOXEF24C2ES51mUjL7gMw',
+          'discoveryDocs': ['https://www.googleapis.com/discovery/v1/apis/translate/v2/rest'],
+        }).then(function() {
+          // Executes an API request, and returns a Promise.
+          // The method name `language.translations.list` comes from the API discovery.
+          return gapi.client.language.translations.list({
+            q: 'Hell, how are you? I am so glad to meet you. I appreciate you. Where are you going now? Shall we go together?',
+            source: 'en',
+            target: 'ru',
+          });
+        }).then(function(response) {
+          console.log(response.result.data.translations[0].translatedText);
+          document.getElementById("results").innerHTML = response.result.data.translations[0].translatedText;
+          var msg = new SpeechSynthesisUtterance();
+          var voices = window.speechSynthesis.getVoices();
+     //     msg.voice = voices.filter(function(voice) { return voice.name == 'Alex'; })[0];
+          msg.voice = voices[17];
+          msg.text = document.getElementById("results").innerHTML;
+          msg.lang = 'ru-RU';
+          window.speechSynthesis.speak(msg);
+        }, function(reason) {
+          console.log('Error: ' + reason.result.error.message);
+          document.getElementById("results").innerHTML = reason.result.error.message;
+        });
+      };
+
+      // Loads the JavaScript client library and invokes `start` afterwards.
+      gapi.load('client', start);
+    </script>
+  </head>
+  <body>
+    <center>
+       <div id="results" style="font-size:30px;"></div>
+    </center>
+  </body>
+</html>

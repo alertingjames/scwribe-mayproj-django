@@ -1,0 +1,153 @@
+<script>window.demoVersion = '2017.08.31';</script>
+
+<!--
+. Muaz Khan     - https://github.com/muaz-khan
+. MIT License   - https://www.webrtc-experiment.com/licence/
+. Documentation - https://github.com/streamproc/MediaStreamRecorder
+. =================================================================
+. audio-recorder.html
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>WebRTC Audio Recording using MediaStreamRecorder</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+</head>
+
+<body>
+
+<script>
+  navigator.mediaDevices.getUserMedia({ audio: true })
+  .then(stream => {
+    const mediaRecorder = new MediaRecorder(stream);
+    mediaRecorder.start();
+  });
+
+  navigator.mediaDevices.getUserMedia({ audio: true })
+  .then(stream => {
+    const mediaRecorder = new MediaRecorder(stream);
+    mediaRecorder.start();
+
+    const audioChunks = [];
+
+    mediaRecorder.addEventListener("dataavailable", event => {
+      audioChunks.push(event.data);
+    });
+  });
+
+  <!--navigator.mediaDevices.getUserMedia({ audio: true })-->
+  <!--.then(stream => {-->
+    <!--const mediaRecorder = new MediaRecorder(stream);-->
+    <!--mediaRecorder.start();-->
+
+    <!--const audioChunks = [];-->
+
+    <!--mediaRecorder.addEventListener("dataavailable", event => {-->
+      <!--audioChunks.push(event.data);-->
+    <!--});-->
+
+    <!--setTimeout(() => {-->
+      <!--mediaRecorder.stop();-->
+    <!--}, 3000);-->
+  <!--});-->
+
+  <!--navigator.mediaDevices.getUserMedia({ audio: true })-->
+  <!--.then(stream => {-->
+    <!--const mediaRecorder = new MediaRecorder(stream);-->
+    <!--mediaRecorder.start();-->
+
+    <!--const audioChunks = [];-->
+    <!--mediaRecorder.addEventListener("dataavailable", event => {-->
+      <!--audioChunks.push(event.data);-->
+    <!--});-->
+
+    <!--mediaRecorder.addEventListener("stop", () => {-->
+      <!--const audioBlob = new Blob(audioChunks);-->
+    <!--});-->
+
+    <!--setTimeout(() => {-->
+      <!--mediaRecorder.stop();-->
+    <!--}, 3000);-->
+  <!--});-->
+
+  <!--navigator.mediaDevices.getUserMedia({ audio: true })-->
+  <!--.then(stream => {-->
+    <!--const mediaRecorder = new MediaRecorder(stream);-->
+    <!--mediaRecorder.start();-->
+
+    <!--const audioChunks = [];-->
+    <!--mediaRecorder.addEventListener("dataavailable", event => {-->
+      <!--audioChunks.push(event.data);-->
+    <!--});-->
+
+    <!--mediaRecorder.addEventListener("stop", () => {-->
+      <!--const audioBlob = new Blob(audioChunks);-->
+      <!--const audioUrl = URL.createObjectURL(audioBlob);-->
+    <!--});-->
+
+    <!--setTimeout(() => {-->
+      <!--mediaRecorder.stop();-->
+    <!--}, 3000);-->
+  <!--});-->
+
+  <!--navigator.mediaDevices.getUserMedia({ audio: true })-->
+  <!--.then(stream => {-->
+    <!--const mediaRecorder = new MediaRecorder(stream);-->
+    <!--mediaRecorder.start();-->
+
+    <!--const audioChunks = [];-->
+    <!--mediaRecorder.addEventListener("dataavailable", event => {-->
+      <!--audioChunks.push(event.data);-->
+    <!--});-->
+
+    <!--mediaRecorder.addEventListener("stop", () => {-->
+      <!--const audioBlob = new Blob(audioChunks);-->
+      <!--const audioUrl = URL.createObjectURL(audioBlob);-->
+      <!--const audio = new Audio(audioUrl);-->
+      <!--audio.play();-->
+    <!--});-->
+
+    <!--setTimeout(() => {-->
+      <!--mediaRecorder.stop();-->
+    <!--}, 3000);-->
+  <!--});-->
+</script>
+
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

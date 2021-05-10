@@ -1,0 +1,166 @@
+{% extends 'may/basenoti.html' %}
+{% block title %}You have message!{% endblock %}
+{% block body %}
+
+<br>
+<br>
+<br>
+    <meta charset="UTF-8">
+    <style>
+        html, body{
+            background: linear-gradient(0deg,rgba(0,100,250,0.8),rgba(0,100,250,0.3),rgba(133, 51, 255, 0.2),rgba(0,100,250,0.3), rgba(0,100,250,0.8)), url("/static/may/images/callbackground.jpg") no-repeat center center fixed;
+            background-size:cover;
+        }
+        #edit {
+            border-radius: 5px;
+            max-width:500px;
+            width:auto;
+            height:auto;
+            margin-top: 3px;
+            margin-bottom: auto;
+            margin-left:auto;
+            margin-right:auto;
+            <!--background:linear-gradient(30deg,rgba(200,150,250,0.7),rgba(50,200,250,0.7));-->
+            opacity:0.9;
+            overflow: hidden;
+            <!--box-shadow: 25px 25px 0 rgba(0, 0, 0, 0.2);-->
+        }
+        .contentform {
+            padding: 0px 20px 20px 20px;
+            float:middle;
+        }
+        .formcontent {
+            width:100%;
+            float:middle;
+            margin:auto;
+            <!--border-right: 1px dotted #CCC;-->
+            box-sizing: border-box;
+            padding: 0px 0px 0px 0px;
+        }
+        #chat_log {
+            margin: 0;
+            width: 100%;
+            height: auto;
+            float: middle;
+            padding: 5px 5px 5px 5px;
+            color:black;
+            overflow-y:auto;
+        }
+        #chat_log::-webkit-scrollbar {
+            display: none;
+        }
+        #send-form{
+            width:100%;
+        }
+        div#list {
+            width: 100%;
+            height: auto;
+        }
+
+        div#list > div {
+            background:white;
+            background-size:cover;
+            box-shadow:5px 5px 15px rgba(0,0,0,0.6);
+        }
+
+        div#list > div > div {
+            width: auto;
+            height: auto;
+            padding: 10px 10px 10px 10px;
+            margin-bottom: 5px;
+            color: black;
+            word-wrap: break-word;
+        }
+        div#list > div > label {
+            width: auto;
+            height: auto;
+            max-width:60px;
+            max-width:60px;
+            border-radius:50px;
+            padding:5px;
+            float:right;
+        }
+    </style>
+
+<script>
+	history.pushState(null, null, location.href);
+	window.onpopstate = function () {
+        history.go(1);
+    };
+</script>
+
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../lib/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<script>
+  function launchFullScreen(element) {
+  if(element.requestFullScreen) {
+    element.requestFullScreen();
+  } else if(element.mozRequestFullScreen) {
+    element.mozRequestFullScreen();
+  } else if(element.webkitRequestFullScreen) {
+    element.webkitRequestFullScreen();
+  }
+}
+
+// Launch fullscreen for browsers that support it!
+launchFullScreen(document.documentElement); // the whole page
+</script>
+
+<div style="display:inline-block; height:0px; width:auto; position:fixed; z-index:100; bottom:30px; border-radius:30px; left:1%;">
+    <div id="google_translate_element" style="float:left;"></div>
+</div>
+<script type="text/javascript">
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+    }
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<span style="font-size:20px; font-weight:800; color: orange;
+	position:fixed; left:50%; float:middle; text-align:center;
+	transform:translate(-50%, -50%); width:350px; z-index:100; top:100px;">MESSAGES YOU HAVE</span>
+
+<img src="/static/may/images/logo.png" style="position:relative; width:60px; height:60px; border-radius:50%; z-index:100; left:3%; margin-top:50px;">
+
+    <div id="edit">
+        <div class="contentform">
+            <div class="formcontent">
+                <div id="chat_log">
+                    <div id="list"></div>
+                </div>
+                <input type="hidden" id="me_id" value="{{me.id}}">
+            </div>
+        </div>
+    </div>
+<script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyABrC1jUQMjJmZJ2p8lnwiECcuKgZeGA7g",
+    authDomain: "scwribe.firebaseapp.com",
+    databaseURL: "https://scwribe.firebaseio.com",
+    projectId: "scwribe",
+    storageBucket: "",
+    messagingSenderId: "915253554092"
+  };
+  firebase.initializeApp(config);
+</script>
+
+<script src="/static/may/js/notification.js"></script>
+
+{% endblock %}
+
+
+
+
+
+
+
+

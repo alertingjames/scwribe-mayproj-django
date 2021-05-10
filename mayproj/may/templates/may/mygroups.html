@@ -1,0 +1,475 @@
+{% extends 'may/basegroup.html' %}
+{% block title %}Groups{% endblock %}
+{% block body %}
+<br>
+<br>
+<br>
+<br>
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid Sans">
+<style>
+
+html, body{
+  background: url("/static/may/images/originalbackground.jpg") no-repeat center center fixed;
+  background-size:cover;
+}
+
+img {
+  border-radius: 5%;
+  height: 80px;
+  width: 80px;
+}
+
+#myBtn {
+  display: none;
+  position: fixed;
+  bottom: 80px;
+  right: 10px;
+  z-index: 99;
+  border: none;
+  outline: none;
+  background-color: red;
+  color: white;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 15px;
+}
+
+#myBtn:hover {
+  background-color: blue;
+}
+#admin{
+    display:none;
+}
+
+.info p {
+  text-align:center;
+  color: #999;
+  text-transform:none;
+  font-weight:600;
+  font-size:15px;
+  margin-top:2px
+}
+
+.info i {
+  color:#F6AA93;
+}
+
+#edit {
+  border-radius: 5px;
+  max-width:550px;
+  width:auto;
+  margin:auto;
+  background-image: url("/static/may/images/pattern2.jpg");
+  background-size:cover;
+  overflow: hidden;
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.3);
+}
+#edit:hover {
+  background-image: url("/static/may/images/pattern1.jpg");
+  background-size:cover;
+}
+
+p span {
+  color: #F00;
+}
+
+p {
+  margin: 0px;
+  font-weight: 200;
+  line-height: 2;
+  color:#000;
+}
+
+input {
+  border-radius: 5px;
+  border: 1px solid #cccccc;
+  width: 100%;
+  height: 42px;
+  float: left;
+  padding: 0px 15px;
+  opacity: 0.9;
+  color: black;
+}
+
+
+.form-group {
+  overflow: hidden;
+  width:100%;
+}
+
+.icon-case {
+  width: 8%;
+  float: left;
+  border-radius: 5px 0px 0px 5px;
+  background:green;
+  height:42px;
+  position: relative;
+  text-align: center;
+  line-height:40px;
+  padding-top:11px;
+}
+
+i {
+  color:yellow;
+}
+
+.contentform {
+  padding: 10px;
+}
+
+#style::-webkit-scrollbar-track
+   {
+	   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.0);
+	   background: transparent;
+   }
+
+#style::-webkit-scrollbar
+  {
+	  width: 5px;
+	  background: transparent;
+  }
+
+#style::-webkit-scrollbar-thumb
+  {
+	  background: red;
+	  border-radius:10px;
+}
+
+label input {
+  display: none;/* <-- hide the default checkbox */
+}
+label span {/* <-- style the artificial checkbox */
+  height: 35px;
+  width: 35px;
+  padding-bottom:6px;
+  margin-right:5px;
+  display: inline-block;
+  position: relative;
+}
+[type=checkbox]:checked + span:before {/* <-- style its checked state..with a ticked icon */
+  content: '\2714';
+  position: absolute;
+  font-size:30px;
+  top: 0px;
+  left: 2px;
+}
+
+[type=checkbox]:checked + span:after {/* <-- style its checked state..with a ticked icon */
+  content: '\2714';
+  position: absolute;
+  top: 0px;
+  bottom:5px;
+  left: 2px;
+  font-size:30px;
+  color:red;
+}
+
+</style>
+
+<script>
+	history.pushState(null, null, location.href);
+	window.onpopstate = function () {
+        history.go(1);
+    };
+</script>
+
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../lib/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<script>
+  function launchFullScreen(element) {
+  if(element.requestFullScreen) {
+    element.requestFullScreen();
+  } else if(element.mozRequestFullScreen) {
+    element.mozRequestFullScreen();
+  } else if(element.webkitRequestFullScreen) {
+    element.webkitRequestFullScreen();
+  }
+}
+
+// Launch fullscreen for browsers that support it!
+launchFullScreen(document.documentElement); // the whole page
+</script>
+
+<form id="alert" action="/updategroup/{{group.id}}" method="post" style="font-size:16px; font-weight:300; color: black; box-shadow: 0px 0px 100px rgba(0, 0, 0, 1.0);
+	position:fixed; left:50%; float:middle; background-color:white; border-radius:10px; padding: 8px 15px 15px 15px;
+	transform:translate(-50%, -50%); width:400px; z-index:200; top:350px; display:none;">
+    {% csrf_token %}
+    <img src="/static/may/images/cancel.png" style="width:25px; height:25px; float:right; margin-top:5px;" onclick="javascript:document.getElementById('alert').style.display='none';">
+    <div style="font-size:20px; margin-top:10px;"><i class="fa fa-plus" style="font-size:20px; color:green; padding-right:10px;"></i>Edit a Group</div>
+	<div style="width:100%; text-align:center;">
+        <input type="text" placeholder="Name" style="margin-top:15px;" required name="name" value="{{group.name}}">
+    </div><br>
+    <button style="margin-top:15px; width:100%; text-align:center; padding:8px; border:0px;
+        border-radius:5px; background:#0066cc; color:white; font-size:14px;">Submit</button>
+</form>
+
+{% if editgroup %}
+<script>
+    document.getElementById("alert").style.display = "block";
+</script>
+{% endif %}
+
+<div id="title" style="font-size:25px; font-weight:800; color: #F7D479; text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.7); text-align:center; font-family:'Droid Sans', serif;
+	position:fixed; left:50%; float:middle; transform:translate(-50%, -50%); width:350px; z-index:100; top:92px; display:none;">MANAGE GROUP</div>
+
+<img src="/static/may/images/logo.png" style="position:relative; width:60px; height:60px; border-radius:50%; z-index:100; left:3%;">
+
+<form id="userlist" action="/invitetogroup" method="post" style="font-size:16px; font-weight:300; color: black; box-shadow: 0px 0px 100px rgba(0, 0, 0, 1.0);
+	position:fixed; left:50%; float:middle; background-color:white; border-radius:10px; padding: 8px 15px 15px 15px;
+	transform:translate(-50%, -50%); max-width:600px; width:auto; min-width:340px; z-index:1000; top:330px; display:none;">
+    {% csrf_token %}
+    <img src="/static/may/images/cancel.png" style="width:25px; height:25px; float:right; margin-top:5px;" onclick="javascript:document.getElementById('userlist').style.display='none';">
+    <div style="font-size:22px; font-weight:600; margin-top:10px; font-family: verdana;"><i class="fa fa-user-plus" style="font-size:25px; color:green; padding-right:10px;"></i>Invite friend</div>
+	<div style="width:100%; text-align:center;">
+        <p>Select friends</p>
+        {% if users %}
+        <div style="margin-top:5px; margin-bottom:5px; width:100%;">
+            <i class="fa fa-search" style="font-size:25px; float:left; color:black;"></i>
+            <input type="text" placeholder="Search..." style="float:left; margin-left:10px; width:80%;" id="search" onkeyup="filter()">
+        </div>
+        <div style="display:inline-block; height:250px; overflow-y:auto; width:100%;" id="style">
+            <ul id="list" class="contentform">
+                {% for user in users %}
+                    <li class="form-group">
+                        <div style="width:100%; text-align:left; color: orange; font-family: verdana; font-size: 120%; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">
+                            <i id="usericon" class="fa fa-user-circle-o" style="float:left; font-size:35px; color:#04a2be; margin-right:10px;"></i><div id="name" style="float:left; margin-top:5px;">{{user.name}}</div>
+                        </div>
+                        <div style="width:100%; max-height:150px; margin-top:8px;">
+                            <div style="color: #04a2be; font-weight:600; font-size:16px; width:100%; text-overflow: ellipsis;">
+                                <div style="text-align:left; display:inline-block; width:100%; padding-left:20%;">
+                                    <div id="email">{{user.email}}</div>
+                                    <div align="right" style="float:right;">
+                                        <a href="javascript:void(0)" style="display:inline-block;">
+                                            <label style="margin-right:10px; color: #04a2be; border-radius:5px; font-size:16px; font-family:verdana;">
+                                                <input type="checkbox" name="items[]" value="{{user.id}}" class="chx" style="width:15px; height:15px;" onchange="highlight(this)">
+                                                <span></span><i class="fa fa-user-plus" style="color: #04a2be; font-size:22px; padding-right:5px;"></i>
+                                            </label>
+                                        </a>
+                                    </div>
+                                    {% if user.company %}
+                                    <i style="color:#04a2be; font-size:25px; margin-right:10px;" class="fa fa-building"></i><label id="company">{{user.company}}</label>
+                                    {% else %}
+                                    <i style="color:#b3b3b3; font-size:25px; margin-right:10px;" class="fa fa-building"></i><label style="color:#b3b3b3;">No</label>
+                                    {% endif %}
+                                </div><br>
+                            </div>
+                        </div>
+                        <div style="background: #04a2be; width:100%; height:2px;"></div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% else %}
+        <center><div id="nofriend" style="color:red; margin:30px;">No friend...</div></center>
+        {% endif %}
+        <input type="text" placeholder="Write something(Optional)" style="margin-top:5px;" id="message" name="message">
+    </div><br>
+    <input type="hidden" id="group_id" value="" name="group_id">
+    <button style="margin-top:15px; width:100%; text-align:center; padding:8px; border:0px;
+        border-radius:5px; background:#0066cc; color:white; font-size:14px;">INVITE</button>
+</form>
+
+<script>
+    var list = document.getElementById("list");
+    var lis = list.querySelectorAll( "#style > ul > li" );
+    var users = [];
+    var users2 = [];
+    for(var i=0; i<lis.length; i++){
+       users.push(lis[i]);
+       users2.push(lis[i]);
+    }
+    function filter(){
+        var keyword = document.getElementById("search").value;
+        if(keyword.length > 0){
+            list.innerHTML = "";
+            for(var i=0; i<users.length; i++){
+                var name = users[i].querySelector("div[id='name']");
+                var email = users[i].querySelector("div[id='email']");
+                if(name.innerHTML.toLowerCase().includes(keyword.toLowerCase())){
+                    list.appendChild(users[i]);
+                }
+                else if(email.innerHTML.toLowerCase().includes(keyword.toLowerCase())){
+                    list.appendChild(users[i]);
+                }
+                else {
+       //             list.appendChild(users[i]);
+                }
+            }
+        }else{
+            list.innerHTML = "";
+            for(var i=0; i<users2.length; i++){
+                list.appendChild(users2[i]);
+            }
+        }
+    }
+</script>
+
+{% if mygroups %}
+<div style="width:100%; height:100%; padding-top:1%; padding-bottom:3%;">
+    <div style="font-size:25px; font-weight:800; margin-bottom:30px; font-family:'Droid Sans', serif;
+        color: #F7D479; text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.7); text-align:center; width:100%;">MANAGE GROUP</div>
+    <form action="javascript:void(0);" method="post">
+        {% csrf_token %}
+        <div class="container-fluid" style="margin-top:2%;">
+            <div class="row">
+                {% for group in mygroups %}
+                <div class="col-sm-4" style="padding-bottom:15px;">
+                    <div id="edit">
+                        <div class="contentform">
+                            <div style="color: orange; font-family: verdana; font-size: 120%; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">
+                                <i id="user" class="fa fa-group" style="font-size:35px; color:#04a2be; margin-right:10px;"></i>{{group.name}}
+                            </div>
+                            <div style="width:100%; max-height:150px; margin-top:8px;">
+                                <div style="text-align:center; color: #04a2be; font-weight:600; font-size:16px; width:100%; text-overflow: ellipsis;">
+                                    <div style="text-align:left; display:inline-block;">
+                                        {{group.date}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div align="right" style="float:left; width:100%; padding-bottom:8px; margin-top:5px;">
+                                <a href="javascript:document.getElementById('group_id').value={{group.id}}; userlist();"
+                                        class="btn btn-info btn-lg" style="padding:8px; font-size:16px;">
+                                    <i class="fa fa-user-plus" style="color:white;"></i>
+                                </a>
+                                <a href="/meetgroup/{{group.id}}" class="btn btn-info btn-lg" style="padding:8px; font-size:16px;">
+                                    <i class="fa fa-comments" style="color:white;"></i>
+                                </a>
+                                <a href="/editgroupbox/{{group.id}}" class="btn btn-info btn-lg" style="padding:8px; font-size:16px;">
+                                    <i class="fa fa-edit" style="color:white;"></i>
+                                </a>
+                                <a href="/deletegroup/{{group.id}}" class="btn btn-info btn-lg" style="padding:8px; font-size:16px;" onclick="return confirm('Are you sure delete it?');">
+                                    <i class="fa fa-trash" style="color:white;"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </form>
+</div>
+
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+<button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+
+<script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyABrC1jUQMjJmZJ2p8lnwiECcuKgZeGA7g",
+    authDomain: "scwribe.firebaseapp.com",
+    databaseURL: "https://scwribe.firebaseio.com",
+    projectId: "scwribe",
+    storageBucket: "",
+    messagingSenderId: "915253554092"
+  };
+  firebase.initializeApp(config);
+</script>
+
+<script>
+// When the user scrolls down 20px from the top of the document, show the button
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+    if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
+        document.getElementById("myBtn").style.display = "block";
+        document.getElementById("title").style.display = "block";
+    } else {
+        document.getElementById("myBtn").style.display = "none";
+        document.getElementById("title").style.display = "none";
+    }
+}
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+}
+
+</script>
+
+<script>
+   $(document).ready(function() {
+        $('.row #user').each(function(i) {
+            $(this).css('color', getRandomColor());
+        });
+        $('.form-group #usericon').each(function(i) {
+            $(this).css('color', getRandomColor());
+        });
+    });
+   function getRandomColor() {
+      var letters = '0123456789ABCDEF';
+      var color = '#';
+      for (var i = 0; i < 6; i++) {
+         color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+   }
+   function userlist(){
+      document.getElementById("userlist").style.display = "block";
+   }
+
+   function highlight(obj){
+     if(obj.checked) {
+        $(obj).parent().parent().css("background","yellow");
+     }else{ $(obj).parent().parent().css("background","transparent");}
+   }
+
+</script>
+
+{% if note %}
+<input type="hidden" id="sender_id" value="{{me.id}}">
+<input type="hidden" id="group_name" value="{{groupname}}">
+<input type="hidden" id="sender_name" value="{{me.name}}">
+
+<script>
+    var sender_id = document.getElementById("sender_id").value;
+    var group_name = document.getElementById("group_name").value;
+    var sender_name = document.getElementById("sender_name").value;
+</script>
+{% for user_id in userids %}
+    <input type="hidden" id="user_id" value="{{user_id}}">
+    <script>
+        var messageText = 'I invited you to ' + group_name + '.\nRegards.\n\n' + sender_name;
+        firebase.database().ref('notifications/' + {{user_id}} + '/' + sender_id).remove();
+        firebase.database().ref('notifications/' + {{user_id}} + '/' + sender_id).push().set({
+            sender_id: sender_id,
+            sender: sender_name,
+            message: messageText,
+            lang: 'en-US',
+            time: new Date().getTime(),
+            sender_id: sender_id
+        });
+    </script>
+{% endfor %}
+<!--<script>alert("Your invitation has been sent!");</script>-->
+{% endif %}
+
+{%else %}
+        <center>
+            <br>
+            <br>
+            <br>
+            <br><br>
+            <h3 class="my_items col-sm-offset-1" style="color:red; margin: 30px;">No group ...</h3></center>
+
+{% endif %}
+{% endblock %}
+
+
+
+
+
+
+
+

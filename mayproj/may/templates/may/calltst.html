@@ -1,0 +1,109 @@
+{% extends 'may/basehomeusers.html' %}
+{% block title %}Meeting Call{% endblock %}
+{% block body %}
+
+<br>
+<br>
+
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        html, body{
+            background: url("/static/may/images/adminbackground.jpg") no-repeat center center fixed;
+            background-size:cover;
+            overflow:hidden;
+        }
+        #edit {
+            max-width:800px;
+            width:auto;
+            height: 100%;
+            margin-left:auto;
+            margin-right:auto;
+            <!--background:linear-gradient(30deg,rgba(200,150,250,0.7),rgba(50,200,250,0.7));-->
+            opacity:0.9;
+            overflow: hidden;
+            <!--box-shadow: 25px 25px 0 rgba(0, 0, 0, 0.2);-->
+        }
+        .contentform {
+            padding: 0px;
+            float:middle;
+        }
+        .formcontent {
+            width:100%;
+            float:middle;
+            margin:auto;
+            box-sizing: border-box;
+            padding: 0px;
+        }
+        #chat_log {
+            border-radius: 5px;
+            border: 1px solid #EEE;
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            float: middle;
+            padding: 150px 15px 100px 15px;
+            opacity: 0.3;
+            color:black;
+            background:linear-gradient(0deg,rgba(250,250,250,0.8),rgba(250,250,250,0.8)),url("/static/may/images/callbackground.jpg");
+            background-size:cover;
+            overflow-y:auto;
+        }
+        #chat_log::-webkit-scrollbar {
+            display: none;
+        }
+        div#list {
+            width: 100%;
+            height: auto;
+        }
+
+        div#list > div > div {
+            width: auto;
+            height: auto;
+            padding: 8px 15px 8px 15px;
+            border-radius:15px;
+            margin-bottom: 5px;
+            color: black;
+            word-wrap: break-word;
+        }
+    </style>
+
+<script>
+	history.pushState(null, null, location.href);
+	window.onpopstate = function () {
+        history.go(1);
+    };
+</script>
+
+<div style="position:fixed; left:50%; float:middle; transform:translate(-50%, -50%); z-index:300; top:200px; display:block;" id="video">
+    <iframe style="" width="450" height="300"
+        frameborder="0" src="https://scwribe.com/groupvideocall#86dd8da8-104b-4271-af63-2b8f7570fa27" allowfullscreen></iframe>
+</div>
+
+<div style="position:fixed; left:50%; float:middle; transform:translate(-50%, -50%); z-index:300; top:500px; display:block;">
+    <iframe style="" width="450" height="600"
+        frameborder="0" src="https://scwribe.com/meet/4/" allowfullscreen></iframe>
+    <!--<input type="text" x-webkit-speech>-->
+</div>
+
+<div id="edit">
+    <div class="contentform">
+        <div class="formcontent">
+            <div id="chat_log">
+                <div id="list" aria-placeholder="No message ..."></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+
+
+

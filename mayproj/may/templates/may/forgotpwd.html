@@ -1,0 +1,227 @@
+{% extends 'may/base.html' %}
+{% block title %}Request Password{% endblock %}
+{% block body %}
+
+<br>
+<br>
+
+<style>
+
+html, body{
+  background: linear-gradient(0deg,rgba(20,150,250,0.0),rgba(0,100,250,0.3),rgba(0,100,250,0.5),rgba(0,100,250,0.3)), url("/static/may/images/pattern3.jpg") no-repeat center center fixed;
+  background-size:cover;
+}
+
+img {
+  border-radius: 50%;
+  height: 80px;
+  width: 80px;
+}
+
+.info i {
+  color:#F6AA93;
+}
+form h1 {
+  font-size: 21px;
+  background: #327a81 none repeat scroll 0% 0%;
+  color: rgb(255, 255, 255);
+  padding: 19px 22px;
+  border-radius: 5px 5px 0px 0px;
+  margin: auto;
+  text-shadow: none;
+  text-align:left
+}
+
+#edit {
+  border-radius: 5px;
+  max-width:500px;
+  width:auto;
+  height:auto;
+  margin-top: 2%;
+  margin-bottom: 2% auto;
+  margin-left:auto;
+  margin-right:auto;
+  <!--background:linear-gradient(30deg,rgba(200,150,250,0.7),rgba(50,200,250,0.7));-->
+  opacity:0.9;
+  overflow: hidden;
+  <!--box-shadow: 25px 25px 0 rgba(0, 0, 0, 0.2);-->
+}
+#edit:hover {
+  <!--background:linear-gradient(0deg,rgba(200,50,250,0.7),rgba(50,200,250,0.7));-->
+}
+
+p span {
+  color: #F00;
+}
+
+p {
+  margin: 0px;
+  font-weight: 600;
+  line-height: 2;
+  color:#fff;
+}
+
+h1 {
+  text-align:center;
+  color: #666;
+  text-shadow: 1px 1px 0px #FFF;
+  margin:50px 0px 0px 0px
+}
+
+input {
+  border-radius: 0px 50px 50px 0px;
+  border: 1px solid #eee;
+  margin-bottom: 15px;
+  margin-right:auto;
+  width: 92%;
+  height: 42px;
+  float: middle;
+  padding: 0px 15px;
+  opacity: 0.8;
+  color:black;
+}
+
+a {
+  text-decoration:inherit
+}
+
+textarea {
+  border-radius: 0px 5px 5px 0px;
+  border: 1px solid #EEE;
+  margin: 0;
+  width: 75%;
+  height: 130px;
+  float: left;
+  padding: 15px 15px;
+  opacity: 0.8;
+  color:black;
+}
+
+.form-group {
+  overflow: hidden;
+  width:100%;
+}
+
+.icon-case {
+  width: 8%;
+  float: left;
+  border-radius: 50px 0px 0px 50px;
+  background:green;
+  height:42px;
+  position: relative;
+  text-align: center;
+  line-height:40px;
+  padding-top:11px;
+}
+
+i {
+  color:yellow;
+}
+
+.contentform {
+  padding: 30px;
+  float:middle;
+  margin:auto;
+}
+
+.bouton-update{
+  background-color: #008CBA;
+  color: #FFF;
+  text-align: center;
+  width: 100%;
+  border:0;
+  padding: 12px 18px;
+  border-radius: 50px 50px 50px 50px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.formcontent {
+  width:100%;
+  float:middle;
+  margin:auto;
+  <!--border-right: 1px dotted #CCC;-->
+  box-sizing: border-box;
+  padding: 0px 0px 0px 0px;
+}
+
+.validation {
+  display:none;
+  margin: 0 0 10px;
+  font-weight:400;
+  font-size:13px;
+  color: #DE5959;
+}
+
+</style>
+
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="../lib/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+{% if note %}
+<h4><script>alert("You haven't been registered. Please register...")</script></h4>
+    {% endif %}
+
+{% if error %}
+<h4><script>alert("No provided photo. Try again ...")</script></h4>
+    {% endif %}
+
+<img src="/static/may/images/processing.gif" class="glyphicon glyphicon-fire" aria-hidden="true" style="position:fixed; left:50%; float:middle; border-radius: 1px;
+	transform:translate(-50%, -50%); width:auto; z-index:100; top:120px; display: none;" id="gif">
+
+{% if note %}<script>alert("Login failed. Please try again...");</script>{% endif %}
+
+
+  <form id="edit" action="/forgotpassword" method="post" enctype="multipart/form-data">
+	  {% csrf_token %}
+	    <!--<h1>Register</h1>-->
+
+    <div class="contentform">
+
+		<div class="formcontent">
+            <center>
+                <img src="/static/may/images/logo.jpg" style="width:120px; height:120px; margin-top:10px; margin-bottom:40px; border-radius: 50%; margin-right:20px; margin-left:10px;" id="output">
+                <div style="color:white; font-size:16px; padding:25px;">Please enter your email. We will send password-reset link to your email</div>
+            </center>
+			<div class="form-group" hidden>
+				<p>Name <span>*</span></p>
+				<span class="icon-case"><i class="fa fa-user"></i></span>
+                	<input type="text" name="name" data-rule="required" data-msg="" id="name" value=""/>
+                	<div class="validation"></div>
+			</div>
+            <div class="form-group">
+				<p>E-mail <span>*</span></p>
+				<span class="icon-case"><i class="fa fa-envelope-o"></i></span>
+                	<input type="email" name="email" data-rule="required" data-msg="" required id="email" value=""/>
+                	<div class="validation"></div>
+			</div>
+			<div class="form-group" style="margin-top:15%; margin-bottom:15%;">
+				<button type="submit" class="bouton-update" onclick="progressBar()">REQUEST PASSWORD</button>
+			</div>
+
+        </div>
+
+	</div>
+
+
+</form>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

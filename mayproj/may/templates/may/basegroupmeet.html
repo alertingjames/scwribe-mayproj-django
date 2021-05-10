@@ -1,0 +1,88 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Scwribe{% endblock %}</title>
+    {% load staticfiles %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Satisfy' rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="/static/may/style.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link rel="shortcut icon" href="/static/may/images/logo.jpg" type="image/jpg">
+
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid Sans">
+
+    <link href="/static/may/images/apple-touch-icon.png" rel="apple-touch-icon" />
+    <link href="/static/may/images/apple-touch-icon-152x152.png" rel="apple-touch-icon" sizes="152x152" />
+    <link href="/static/may/images/apple-touch-icon-167x167.png" rel="apple-touch-icon" sizes="167x167" />
+    <link href="/static/may/images/apple-touch-icon-180x180.png" rel="apple-touch-icon" sizes="180x180" />
+    <link href="/static/may/images/icon-hires.png" rel="icon" sizes="192x192" />
+    <link href="/static/may/images/icon-normal.png" rel="icon" sizes="128x128" />
+
+    <style>
+#myBtn {
+  display: none;
+  position: fixed;
+  bottom: 40px;
+  right: 30px;
+  z-index: 99;
+  border: none;
+  outline: none;
+  background-color: yellow;
+  color: white;
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+#myBtn:hover {
+  background-color: red;
+}
+#advanced{
+    width:300px;
+    background-color:#000000;
+}
+.menu{
+    margin-left:10px;
+}
+
+#exit:hover{
+   color: #fff;
+}
+</style>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>-->
+</head>
+<body>
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid" style="padding:3px;">
+        <i class="fa fa-reply" id="exit" style="font-size:20px; color:white; float:left; padding-top:10px;" onclick="exitGroup()"></i>
+        <div class="" style="color:white; text-align:center; padding-top:5px; font-size:20px; font-family:'Droid Sans';">
+            <i class="fa fa-group" style="margin-right:10px; font-size:20px; color:white;"></i>GROUP MEETING
+        </div>
+    </div>
+</nav>
+
+<script>
+   var backF = false;
+   function exitGroup(){
+      if (confirm("Do you want to finish meeting?")) {
+          firebase.database().ref('gmusers' + group_id + '/' + sender_id).remove();
+          if((note1 != '' || noteList.length > 0) && userList.length > 0){
+              document.getElementById("alert").style.display = "block";
+              backF = true;
+              return;
+          }
+          else window.location.href = "/home";
+      }
+   }
+</script>
+
+{% block body %}
+    {% endblock %}
+
+
+</body>
+</html>
+

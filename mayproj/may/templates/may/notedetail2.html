@@ -1,0 +1,418 @@
+{% extends 'may/base.html' %}
+{% block title %}With {{note.name2}}{% endblock %}
+{% block body %}
+
+<br>
+
+<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js"></script>
+  <script>
+      WebFont.load({
+      google: {
+      families: ["Lato:100,300,400,700,900","Karla:regular","Cookie:regular"]
+    }
+    });
+</script>
+
+<style>
+
+html, body{
+  background: linear-gradient(0deg,rgba(0,100,250,0.8),rgba(0,100,250,0.3),rgba(133, 51, 255, 0.2),rgba(0,100,250,0.3), rgba(0,100,250,0.8)), url("/static/may/images/callbackground.jpg") no-repeat center center fixed;
+  background-size:cover;
+}
+
+img {
+  border-radius: 50%;
+  height: 80px;
+  width: 80px;
+}
+
+h1 {
+  font-size: 20px;
+  color: white;
+  padding: 0px 15px 15px 20px;
+  text-shadow: none;
+  font-family: verdana;
+  text-align:center;
+}
+
+.container-fluid {
+    background:linear-gradient(90deg,rgba(255,255,255,0.0),rgba(255,255,255,0.8),rgba(255,255,255,0.8),rgba(255,255,255,0.9),rgba(255,255,255,0.8),rgba(255,255,255,0.8),rgba(250,255,250,0.0));
+    padding-top:10px;
+}
+
+#edit {
+  border-radius: 5px;
+  width:100%;
+  height:auto;
+  margin-bottom: auto;
+  margin-left:auto;
+  margin-right:auto;
+  overflow: hidden;
+}
+
+p span {
+  color: #F00;
+}
+
+p {
+  margin: 0px;
+  font-weight: 600;
+  font-size:16px;
+  line-height: 2;
+  color: #04a2be;
+}
+
+a {
+  text-decoration:inherit
+}
+
+.time{float:left; color: orange; font-family: verdana; font-size: 120%; margin-top:4px;}
+
+.form-group {
+  overflow: hidden;
+  width:100%;
+}
+
+.contentform {
+  padding: 10px;
+  float:middle;
+  margin:auto;
+}
+
+.formcontent {
+  width:100%;
+  float:middle;
+  margin:auto;
+  box-sizing: border-box;
+  padding: 0px;
+}
+
+::-webkit-scrollbar {
+    width: 0px;  /* remove scrollbar space */
+    background: transparent;  /* optional: just make scrollbar invisible */
+}
+/* optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+    background: #FF0000;
+}
+
+#chat_log {
+   overflow-y:auto;
+}
+#chat_log::-webkit-scrollbar {
+   display: none;
+}
+
+div#list {
+   width: 100%;
+   height: auto;
+}
+
+div#list > div > div {
+   width: auto;
+   height: auto;
+   padding: 8px 15px 8px 15px;
+   border-radius:15px;
+   margin-bottom: 5px;
+   color: black;
+   word-wrap: break-word;
+}
+
+</style>
+
+<script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.5.1.js">
+</script>
+
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../lib/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<div style="display:inline-block; height:0px; width:auto; position:fixed; z-index:100; bottom:30px; border-radius:30px; left:1%;">
+    <div id="google_translate_element" style="float:left;"></div>
+</div>
+<script type="text/javascript">
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+    }
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<div>
+    <h1>Your Meeting Notes</h1>
+    <div class="container-fluid" style="margin-top:1%;">
+        <div class="row">
+            <div class="col-sm-4" style="max-height:82%; height:auto; overflow:scroll; padding:20px;">
+                <form id="edit" action="#" method="post" enctype="multipart/form-data">
+	                {% csrf_token %}
+                    <div class="contentform">
+                        <div class="formcontent">
+                            <div class="form-group">
+				                <div style="width:100%;">
+                                    <div style="width:100%;">
+                                        <div style="padding:3px 15px 3px 15px; color: #04a2be; float:right; font-weight:800; font-size:18px; max-width:100%; width:auto; border-radius:50px 8px 50px 8px; border:1.5px solid #04a2be;">
+                                            {{note.urgency}}
+                                        </div><br>
+                                    </div><br>
+                                    <div style="padding-left:10px; float:left; width:100%; text-align:left; word-break: break-all; word-wrap: break-word;">
+                                        <p>Topic: </p><label id="topic" style="font-size:18px; font-weight:300; color: #008080; width:100%; padding:0px 15px 0px 30px;">{{note.topic}}</label>
+                                    </div><br>
+                                    <div style="margin-bottom:15px; margin-top:15px; padding-left:10px; padding-right:8px; float:left; width:100%; text-align:left; word-break: break-all; word-wrap: break-word;">
+                                        <i style="float:left; color:#04a2be; font-size:30px; margin-right:10px;" class="fa fa-user-circle"></i>
+                                        <p style="float:left;">Meeting Attendees: </p>
+                                        {% for att in attendees %}
+                                            <label style="font-size:18px; font-weight:300; color: #008080; width:100%; padding:0px 15px 0px 30px; margin-right:10px;">{{att.name}} {% if att.company %} ({{att.company}}), {% endif %}</label>
+                                        {% endfor %}
+                                    </div><br>
+                                    <div style="padding:0px 10px 0px 10px; width:100%;">
+                                        <i class="fa fa-clock-o" style=" float:left; font-size:35px; color:#04a2be; margin-right:10px;"></i>
+                                        <div class="time" id="start">{{note.start_time}}</div> <div style="float:left; text-align:center; margin:4px 10px 4px 10px;"> --- </div> <div class="time" id="end">{{note.end_time}}</div>
+                                        <div id="date" style="float:right; color:#006666; font-size:18px; font-weight:600; font-family:'Droid Sans';">{{note.end_time}}</div>
+                                    </div>
+                                    <div style="margin-top:15px; padding-left:10px; padding-right:8px; float:left; width:100%; text-align:left; word-break: break-all; word-wrap: break-word;">
+                                        <p>Summary: </p><label id="summary" style="font-size:18px; font-weight:300; color: #008080; width:100%; padding:0px 15px 0px 30px;">{{note.summary}}</label>
+                                    </div><br>
+                                    <div style="margin-top:15px; padding-left:10px; padding-right:8px; float:left; width:100%; text-align:left; word-break: break-all; word-wrap: break-word;">
+                                        <p>Call of Action: </p><label id="callofaction" style="font-size:18px; font-weight:300; color: #008080; width:100%; padding:0px 15px 0px 30px;">{{note.callofaction}}</label>
+                                    </div>
+                                </div>
+                            </div>
+	                    </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-sm-4" style="max-height:82%; height:auto; overflow:scroll; padding:20px;">
+                <p>Meeting Notes Sent to You</p>
+
+                {% for att in attendees %}
+                    <i style="float:left; color:#04a2be; font-size:20px; margin-right:10px;" id="usericon" class="fa fa-user-circle"></i><label style="float:left; color:#009933;">{{att.name}} {% if att.company %} ({{att.company}}){% endif %}:</label>
+                    {% if att.note %}
+                        <div id="note2" style="padding:8px; color: #008080; float:left; font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+                                font-weight:300; font-size:16px; width:100%;  border-radius:5px; border:1.5px solid #04a2be; min-height:80px; margin-bottom:20px;">
+                            {{att.note}}
+                        </div><br>
+                    {% else %}<label style="width:100%; text-align:center; padding:20px;">No meeting note sent to you</label>{% endif %}
+                {% endfor %}
+                <br>
+                <p>Meeting Notes You've Sent to Others</p>
+                {% if note.note %}
+                <div id="note1" style="padding:8px; color: #008080; float:left; font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+                        font-weight:300; font-size:16px; width:100%;  border-radius:5px; border:1.5px solid #04a2be; min-height:80px;">
+                    {{note.note}}
+                </div>
+                {% else %}<label style="width:100%; text-align:center; padding:20px;">No meeting note you've sent to other</label>{% endif %}
+            </div>
+            <div class="col-sm-4" style="max-height:82%; height:auto; overflow:scroll; padding:20px;">
+                <p>Full Transcript</p>
+                <div id="chat_log" style="padding:8px; color: #008080; float:left; font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+                        font-weight:300; font-size:16px; width:100%; height:72%; border-radius:5px; border:1.5px solid #04a2be;">
+                    <div id="list" aria-placeholder="No message ..."></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="sender_id" value="{{note.talker}}">
+<input type="hidden" id="user_id" value="{{user_id}}">
+<input type="hidden" id="start_timestamp" value="{{note.start_time}}">
+<input type="hidden" id="end_timestamp" value="{{note.end_time}}">
+<input type="hidden" id="lang" value="{{note.lang}}">
+<input type="hidden" id="sender_name" value="{{note.name}}">
+<script>
+    document.getElementById("date").innerHTML = getDate(parseInt(document.getElementById("date").innerHTML));
+    document.getElementById("start").innerHTML = getTime(parseInt(document.getElementById("start").innerHTML));
+    document.getElementById("end").innerHTML = getTime(parseInt(document.getElementById("end").innerHTML));
+    function getTime(ms){
+        var date = new Date(ms);
+        var seconds = date.getSeconds();
+        var minutes = date.getMinutes();
+        var hours = date.getHours();
+
+        var ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        minutes = minutes < 10 ? '0'+minutes : minutes;
+        var timeStr = hours + ':' + minutes + ' ' + ampm;
+        return timeStr;
+   }
+   function getDate(ms){
+        var months = ['January', 'Febrary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        var date = new Date(ms);
+        var seconds = date.getSeconds();
+        var minutes = date.getMinutes();
+        var hours = date.getHours();
+
+        var year = date.getFullYear();
+        var month = date.getMonth(); // beware: January = 0; February = 1, etc.
+        var day = date.getDate();
+
+        var dateStr = months[month] + ' ' + day + ', ' + year;
+        return dateStr;
+   }
+</script>
+
+<script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyABrC1jUQMjJmZJ2p8lnwiECcuKgZeGA7g",
+    authDomain: "scwribe.firebaseapp.com",
+    databaseURL: "https://scwribe.firebaseio.com",
+    projectId: "scwribe",
+    storageBucket: "",
+    messagingSenderId: "915253554092"
+  };
+  firebase.initializeApp(config);
+</script>
+
+<script>
+var sender_id = document.getElementById("sender_id").value;
+var user_id = document.getElementById("user_id").value;
+var start_timestamp = document.getElementById("start_timestamp").value;
+var end_timestamp = document.getElementById("end_timestamp").value;
+var sender_name = document.getElementById("sender_name").value;
+
+var starCountRef = firebase.database().ref('messages/' + sender_id + '_' + user_id);
+starCountRef.on('child_added', function(snapshot) {
+  var new_post = snapshot.val();
+  var mes = new_post.message;
+  var langu = new_post.lang;
+
+  if (mes.length > 0){
+    var time = new_post.time;
+    if(parseInt(time) >= parseInt(start_timestamp) && parseInt(time) <= parseInt(end_timestamp)){
+        var date = new Date(time);
+
+        var seconds = date.getSeconds();
+        var minutes = date.getMinutes();
+        var hours = date.getHours();
+
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1; // beware: January = 0; February = 1, etc.
+        var day = date.getDate();
+
+        var ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        minutes = minutes < 10 ? '0'+minutes : minutes;
+        var timeStr = month + '/' + day + '/' + year + ' ' + hours + ':' + minutes + ' ' + ampm;
+
+        var ul = document.getElementById("list");
+        if (new_post.sender_id == sender_id){
+            var li = document.createElement("div");
+            li.style.color = 'white';
+            li.style.fontSize = '16';
+            li.style.paddingRight = '10';
+            li.style.paddingLeft = '10';
+            li.style.paddingTop = '10';
+            li.style.paddingBottom = '10';
+            li.style.backgroundColor = '#2390f6';
+            li.style.maxWidth = "300";
+            li.style.display = 'inline-block';
+
+            li.innerHTML = mes;
+
+            li.style.textAlign = 'left';
+            var ul2 = document.createElement("div");
+
+            ul2.append(li);
+            ul2.style.textAlign = 'right';
+            ul.appendChild(ul2);
+
+            var lli = document.createElement("div");
+            lli.style.color = 'black';
+            lli.style.fontSize = '12';
+            lli.style.display = 'inline-block';
+            lli.innerHTML = timeStr;
+            lli.style.textAlign = 'left';
+            var ull2 = document.createElement("div");
+
+            ull2.append(lli);
+            ull2.style.textAlign = 'right';
+
+            ul.appendChild(ull2);
+
+        }else {
+            var li = document.createElement("div");
+            li.style.textAlign = 'left';
+            li.style.color = 'black';
+            li.style.fontSize = '16';
+            li.style.paddingRight = '10';
+            li.style.paddingLeft = '10';
+            li.style.paddingTop = '10';
+            li.style.paddingBottom = '10';
+            li.style.backgroundColor = '#e0d0f6';
+            li.style.maxWidth = "300";
+            li.style.display = 'inline-block';
+
+            li.innerHTML = mes;
+
+            var ul3 = document.createElement("div");
+
+            ul3.append(li);
+            ul.appendChild(ul3);
+
+            var llli = document.createElement("div");
+            llli.style.textAlign = 'left';
+            llli.style.color = 'black';
+            llli.style.fontSize = '12';
+
+            llli.style.display = 'inline-block';
+            llli.innerHTML = timeStr;
+            var ull3 = document.createElement("div");
+
+            ull3.append(llli);
+            ul.appendChild(ull3);
+
+            online.innerHTML = new_post.online;
+            st.innerHTML = new_post.online;
+            st.style.display = 'inline-block';
+
+        //    hear(mes);
+            chat_log.scrollTop = chat_log.scrollHeight;
+        }
+
+        chat_log.scrollTop = chat_log.scrollHeight;
+
+    }
+
+  }
+
+  chat_log.scrollTop = chat_log.scrollHeight;
+
+});
+
+$(document).ready(function() {
+   $('#usericon').each(function(i) {
+      $(this).css('color', getRandomColor());
+   });
+});
+
+function getRandomColor() {
+   var letters = '0123456789ABCDEF';
+   var color = '#';
+   for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+   }
+   return color;
+}
+
+</script>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

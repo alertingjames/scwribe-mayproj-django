@@ -1,0 +1,656 @@
+{% extends 'may/baseadmin.html' %}
+{% block title %}Company Manager Homepage{% endblock %}
+{% block body %}
+<br>
+<br>
+<br>
+<br>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<meta charset="utf-8">
+<meta content="stuff, to, help, search, engines, not" name="keywords">
+<meta content="What this page is about." name="description">
+<style>
+
+html, body{
+  background: url("/static/may/images/adminbackground.jpg") no-repeat center center fixed;
+  background-size:cover;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 400px;
+    box-shadow: 16px 16px 16px 0px rgba(0,0,0,0.5);
+    z-index: 100;
+    border-radius: 8px;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.desc {
+    padding: 6px;
+    text-align: center;
+}
+
+img {
+  border-radius: 5%;
+  height: 80px;
+  width: 80px;
+}
+
+.manage {
+  border-radius: 10%;
+}
+
+.table-users {
+  border: 1px solid #327a81;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.1);
+  max-width:500px;
+  width:auto;
+  height:auto;
+  margin: 2% auto;
+  background-color: white;
+  overflow-x:auto;
+}
+
+.table>tbody>tr>td{
+    vertical-align: middle;
+    horizontal-align: middle;
+}
+
+table td, table th {
+  color: #2b686e;
+  padding: 10px;
+  border: 1px solid white;
+  text-align: center;
+  vertical-align: middle;
+}
+table td {
+  text-align: center;
+  vertical-align: middle;
+}
+table td:last-child {
+  font-size: 0.95em;
+  line-height: 0.8;
+  text-align: center;
+}
+table th {
+  background-color: #04a2be;
+  font-weight: 520;
+  color:white;
+  text-align: center;
+  vertical-align: middle;
+}
+table tr:nth-child(2n) {
+  background-color: white;
+  border: 1px solid #327a81;
+}
+table tr:nth-child(2n+1) {
+  background-color: #edf7f8;
+  border: 1px solid white;
+}
+#manage-menu{
+    -webkit-padding-start: 0px;
+    -webkit-margin-before: 0px;
+    -webkit-margin-after: 0px;
+    margin-top: 0px;
+    margin-right: auto;
+    margin-bottom: 0px;
+    margin-left: auto;
+    width:40px;
+    background-color:#000000;
+    position: relative; /* <-- Added */
+    z-index: 100; /* <-- Added */
+}
+#manage-menu1{
+    -webkit-padding-start: 0px;
+    -webkit-margin-before: 0px;
+    -webkit-margin-after: 0px;
+    margin-top: 0px;
+    margin-right: auto;
+    margin-bottom: 0px;
+    margin-left: auto;
+    width:40px;
+    background-color:#000000;
+    position: relative; /* <-- Added */
+    z-index: 100; /* <-- Added */
+}
+
+#myBtn {
+  display: none;
+  position: fixed;
+  bottom: 80px;
+  right: 10px;
+  z-index: 99;
+  border: none;
+  outline: none;
+  background-color: red;
+  color: white;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 15px;
+}
+
+#myBtn:hover {
+  background-color: blue;
+}
+#admin{
+    display:none;
+}
+
+.info p {
+  text-align:center;
+  color: #999;
+  text-transform:none;
+  font-weight:600;
+  font-size:15px;
+  margin-top:2px
+}
+
+.info i {
+  color:#F6AA93;
+}
+
+#edit {
+  border-radius: 5px;
+  max-width:550px;
+  width:auto;
+  margin:auto;
+  background-image: url("/static/may/images/pattern2.jpg");
+  background-size:cover;
+  overflow: hidden;
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.3);
+}
+#edit:hover {
+  background-image: url("/static/may/images/pattern1.jpg");
+  background-size:cover;
+}
+
+p span {
+  color: #F00;
+}
+
+p {
+  margin: 0px;
+  font-weight: 200;
+  line-height: 2;
+  color:#fff;
+}
+
+input {
+  border-radius: 5px;
+  border: 1px solid #cccccc;
+  width: 100%;
+  height: 42px;
+  float: left;
+  padding: 0px 15px;
+  opacity: 0.9;
+  color: black;
+}
+
+select {
+  border-radius: 0px 5px 5px 0px;
+  border: 1px solid #eee;
+  margin-bottom: 15px;
+  width: 75%;
+  height: 40px;
+  float: left;
+  padding: 0px 15px;
+  opacity: 0.8;
+  color:blue;
+}
+
+a {
+  text-decoration:inherit
+}
+
+textarea {
+  border-radius: 5px 5px 5px 5px;
+  border: 1px solid #EEE;
+  width: 100%;
+  height: 60px;
+  float: left;
+  padding: 8px 8px;
+  opacity: 0.8;
+  color:blue;
+}
+
+.form-group {
+  overflow: hidden;
+  width:100%;
+}
+
+.icon-case {
+  width: 8%;
+  float: left;
+  border-radius: 5px 0px 0px 5px;
+  background:green;
+  height:42px;
+  position: relative;
+  text-align: center;
+  line-height:40px;
+  padding-top:11px;
+}
+
+i {
+  color:yellow;
+}
+
+.contentform {
+  padding: 10px 10px;
+}
+
+.bouton-update{
+  background-color: #845801;
+  color: #FFF;
+  text-align: center;
+  width: 100%;
+  border:0;
+  padding: 17px 25px;
+  border-radius: 0px 0px 5px 5px;
+  cursor: pointer;
+  margin-top: 40px;
+  font-size: 18px;
+}
+
+label input {
+  display: none;/* <-- hide the default checkbox */
+}
+label span {/* <-- style the artificial checkbox */
+  height: 35px;
+  width: 35px;
+  padding-bottom:6px;
+  margin-right:5px;
+  display: inline-block;
+  position: relative;
+}
+[type=checkbox]:checked + span:before {/* <-- style its checked state..with a ticked icon */
+  content: '\2714';
+  position: absolute;
+  font-size:30px;
+  top: 0px;
+  left: 2px;
+}
+
+[type=checkbox]:checked + span:after {/* <-- style its checked state..with a ticked icon */
+  content: '\2714';
+  position: absolute;
+  top: 0px;
+  bottom:5px;
+  left: 2px;
+  font-size:30px;
+  color:red;
+}
+
+.show {
+    z-index:1000;
+    position: absolute;
+    background-color:#ffffff;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+    padding:8px 12px;
+    border-radius:20px;
+    width:auto;
+    font-size:16px;
+    margin: 0;
+    color:black;
+    font-weight:600;
+}
+
+.hide {
+    display: none;
+}
+
+</style>
+
+<script>
+	history.pushState(null, null, location.href);
+	window.onpopstate = function () {
+        history.go(1);
+    };
+</script>
+
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../lib/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<!--<meta name="mobile-web-app-capable" content="yes">-->
+<!--<meta name="apple-mobile-web-app-capable" content="yes">-->
+
+<!--<script>-->
+  <!--function launchFullScreen(element) {-->
+  <!--if(element.requestFullScreen) {-->
+    <!--element.requestFullScreen();-->
+  <!--} else if(element.mozRequestFullScreen) {-->
+    <!--element.mozRequestFullScreen();-->
+  <!--} else if(element.webkitRequestFullScreen) {-->
+    <!--element.webkitRequestFullScreen();-->
+  <!--}-->
+<!--}-->
+
+<!--// Launch fullscreen for browsers that support it!-->
+<!--launchFullScreen(document.documentElement); // the whole page-->
+<!--</script>-->
+{% if editmember %}
+<input type="hidden" id="editname" value="{{editmember.name}}">
+<input type="hidden" id="editemail" value="{{editmember.email}}">
+<input type="hidden" id="editpassword" value="{{editmember.password}}">
+{% endif %}
+
+{% if admin %}
+<input type="hidden" id="profilename" value="{{admin.name}}">
+<input type="hidden" id="profileemail" value="{{admin.email}}">
+<input type="hidden" id="profilepwd" value="{{admin.password}}">
+<input type="hidden" id="profilecompany" value="{{admin.company}}">
+{% endif %}
+
+<div onclick="showAlert()" id="alert" style="font-size:16px; font-weight:300; color: red; text-align:center; box-shadow: 4px 5px 0 rgba(0, 0, 0, 0.3);
+	position:fixed; left:50%; float:middle; background-color:white; border-radius:10px; padding: 5px 10px 5px 10px;
+	transform:translate(-50%, -50%); width:200px; z-index:2000; top:260px; display:none;"><i class="fa fa-bell" style="font-size:18px; color:red;"></i>
+	You have message!<br>
+	Click here to contact it.
+</div>
+
+<form id="alert1" action="/addmember" method="post" style="font-size:16px; font-weight:300; color: black; box-shadow: 0px 0px 100px rgba(0, 0, 0, 1.0);
+	position:fixed; left:50%; float:middle; background-color:white; border-radius:10px; padding: 8px 15px 15px 15px;
+	transform:translate(-50%, -50%); width:400px; z-index:200; top:350px; display:none;">
+    {% csrf_token %}
+    <img src="/static/may/images/cancel.png" style="width:25px; height:25px; float:right; margin-top:5px;" onclick="javascript:document.getElementById('alert1').style.display='none';">
+    <div style="font-size:20px; margin-top:10px;"><i class="fa fa-plus" style="font-size:20px; color:green; padding-right:10px;"></i>Add member info</div>
+	<div style="width:100%; text-align:center;">
+        <input type="text" placeholder="Name" style="margin-top:15px;" required name="name">
+        <input type="text" placeholder="Email" style="margin-top:5px;" required name="email">
+        <input type="text" placeholder="Password" style="margin-top:5px;" required name="password">
+    </div><br>
+    <button style="margin-top:15px; width:100%; text-align:center; padding:8px; border:0px;
+        border-radius:5px; background:#0066cc; color:white; font-size:14px;">Submit</button>
+</form>
+<form id="alert2" action="/updatemember/{{editmember.id}}/" method="post" style="font-size:16px; font-weight:300; color: black; box-shadow: 0px 0px 100px rgba(0, 0, 0, 1.0);
+	position:fixed; left:50%; float:middle; background-color:white; border-radius:10px; padding: 8px 15px 15px 15px;
+	transform:translate(-50%, -50%); width:400px; z-index:200; top:350px; display:none;">
+    {% csrf_token %}
+    <img src="/static/may/images/cancel.png" style="width:25px; height:25px; float:right; margin-top:5px;" onclick="javascript:document.getElementById('alert2').style.display='none';">
+    <div style="font-size:20px; margin-top:10px;"><i class="fa fa-pencil" style="font-size:20px; color:green; padding-right:10px;"></i>Edit member info</div>
+	<div style="width:100%; text-align:center;">
+        <div style="margin-top:15px;">
+            <span class="icon-case"><i class="fa fa-user"></i></span>
+            <input type="text" placeholder="Name" style="width:92%; border-radius:0px 5px 5px 0px; margin-bottom:5px;" required id="namebox" name="name">
+        </div>
+        <div>
+            <span class="icon-case"><i class="fa fa-envelope-o"></i></span>
+            <input type="text" placeholder="Email" style="width:92%; border-radius:0px 5px 5px 0px; margin-bottom:5px;" required id="emailbox" name="email" readonly>
+        </div>
+        <div>
+            <span class="icon-case"><i class="fa fa-lock"></i></span>
+            <input type="text" placeholder="Password" style="width:92%; border-radius:0px 5px 5px 0px; margin-bottom:5px;" required id="passwordbox" name="password">
+        </div>
+    </div><br>
+    <button style="margin-top:15px; width:100%; text-align:center; padding:8px; border:0px;
+        border-radius:5px; background:#0066cc; color:white; font-size:14px;">Submit</button>
+</form>
+
+<form id="alert3" action="/updateadmin/{{admin.id}}/" method="post" style="font-size:16px; font-weight:300; color: black; box-shadow: 0px 0px 100px rgba(0, 0, 0, 1.0);
+	position:fixed; left:50%; float:middle; background-color:white; border-radius:10px; padding: 8px 15px 15px 15px;
+	transform:translate(-50%, -50%); width:400px; z-index:200; top:350px; display:none;">
+    {% csrf_token %}
+    <img src="/static/may/images/cancel.png" style="width:25px; height:25px; float:right; margin-top:5px;" onclick="javascript:document.getElementById('alert3').style.display='none';">
+    <div style="font-size:20px; margin-top:10px;"><i class="fa fa-user" style="font-size:25px; color:green; padding-right:10px;"></i>My Profile</div>
+	<div style="width:100%; text-align:center;">
+        <div style="margin-top:15px;">
+            <span class="icon-case"><i class="fa fa-user"></i></span>
+            <input type="text" placeholder="Name" style="width:92%; border-radius:0px 5px 5px 0px; margin-bottom:5px;" required id="adminname" name="name">
+        </div>
+        <div>
+            <span class="icon-case"><i class="fa fa-envelope-o"></i></span>
+            <input type="text" placeholder="Email" style="width:92%; border-radius:0px 5px 5px 0px; margin-bottom:5px;" required id="adminemail" name="email" readonly>
+        </div>
+        <div style="margin-top:5px;">
+            <span class="icon-case"><i class="fa fa-lock"></i></span>
+            <input type="text" placeholder="Password" style="width:92%; border-radius:0px 5px 5px 0px; margin-bottom:5px;" required id="adminpwd" name="password">
+        </div>
+        <div style="margin-top:5px;">
+            <span class="icon-case"><i class="fa fa-building"></i></span>
+            <input type="text" placeholder="Company" style="width:92%; border-radius:0px 5px 5px 0px; margin-bottom:5px;" required id="admincompany" name="company">
+        </div>
+    </div><br>
+    <button style="margin-top:15px; width:100%; text-align:center; padding:8px; border:0px;
+        border-radius:5px; background:#0066cc; color:white; font-size:14px;">Update</button>
+</form>
+
+<script>
+if (document.getElementById("editname").value != ''){
+    document.getElementById("alert2").style.display = "block";
+    document.getElementById("alert1").style.display = "none";
+    document.getElementById("alert3").style.display = "none";
+    document.getElementById("namebox").value = document.getElementById("editname").value;
+    document.getElementById("emailbox").value = document.getElementById("editemail").value;
+    document.getElementById("passwordbox").value = document.getElementById("editpassword").value;
+}
+</script>
+
+{% if addbox %}
+<script>
+    document.getElementById("alert1").style.display = "block";
+    document.getElementById("alert2").style.display = "none";
+    document.getElementById("alert3").style.display = "none";
+</script>
+{% endif %}
+
+<div id="title" style="font-size:25px; font-weight:800; color: #F7D479; text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.7); text-align:center;
+	position:fixed; left:50%; float:middle; transform:translate(-50%, -50%); width:350px; z-index:100; top:92px; display:none;">COMPANY MEMBERS</div>
+
+<img src="/static/may/images/logo.png" style="position:relative; width:60px; height:60px; border-radius:50%; z-index:100; left:3%;">
+
+{% if members %}
+<div style="width:100%; height:100%; padding-top:1%; padding-bottom:3%;">
+    <div style="font-size:25px; font-weight:800; margin-bottom:30px;
+        color: #F7D479; text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.7); text-align:center; width:100%;">COMPANY MEMBERS</div>
+    <form action="/deletemember" method="post">
+        {% csrf_token %}
+        <div class="container-fluid" style="margin-top:2%;">
+            <div class="row">
+                {% for member in members %}
+                <div class="col-sm-4" style="padding-bottom:15px;">
+                    <div id="edit">
+                        <div class="contentform">
+                            <div style="color: orange; font-family: verdana; font-size: 120%; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">
+                                <i id="user" class="fa fa-user-circle-o" style="font-size:35px; color:#04a2be; margin-right:10px;"></i>{{member.name}}
+                            </div>
+                            <div style="width:100%; max-height:150px;">
+                                <div style="color: #04a2be; font-weight:600; font-size:16px; width:100%; text-overflow: ellipsis; text-align:center;">
+                                    {{member.email}}<br>
+                                    <i style="color:red; font-size:16px; margin-right:10px;" class="fa fa-lock"></i>{{member.password}}
+                                </div>
+                            </div>
+                            <div align="right" style="float:left; width:100%; padding-bottom:8px;">
+                                <a href="javascript:void(0)" style="display:inline-block;">
+                                    <label style="margin-right:10px; color: #04a2be; border-radius:5px; font-size:16px; font-family:verdana;">
+                                        <input type="checkbox" name="items[]" value="{{member.id}}" class="chx" style="width:15px; height:15px;" onchange="highlight(this)">
+                                        <span></span><i class="fa fa-trash" style="color: #04a2be; font-size:22px; padding-right:5px;"></i>
+                                    </label>
+                                </a>
+                                <a href="/editbox/{{member.id}}" class="btn btn-info btn-lg" style="padding:8px; font-size:16px;">
+                                    <span class="glyphicon glyphicon-edit" style="padding-right:5px;"></span>Update
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <input type="submit"  id="rmenu" value="Delete" class="hide" onclick="javascript:return confirm('Are you sure delete members selected?');">
+        </div>
+    </form>
+</div>
+
+<input type="hidden" id="user_id" value="{{user_id}}">
+
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+<button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+
+<script>
+// When the user scrolls down 20px from the top of the document, show the button
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+    if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
+        document.getElementById("myBtn").style.display = "block";
+        document.getElementById("title").style.display = "block";
+    } else {
+        document.getElementById("myBtn").style.display = "none";
+        document.getElementById("title").style.display = "none";
+    }
+}
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+}
+
+var m = 0;
+function highlight(obj){
+   if(obj.checked) {
+      $(obj).parent().parent().css("background","yellow");
+      m++;
+   }else{ $(obj).parent().parent().css("background","transparent");m--;}
+}
+
+$(document).ready(function() {
+    $(".chx").change(function() {
+            if(m>0) {
+                //Do stuff
+                $('body').on('contextmenu', '#edit', function() {
+
+                    //alert("contextmenu"+event);
+                    document.getElementById("rmenu").className = "show";
+                    document.getElementById("rmenu").style.top =  mouseY(event) + 'px';
+                    document.getElementById("rmenu").style.left = mouseX(event) + 'px';
+
+                    window.event.returnValue = false;
+                });
+            }
+            else {
+                //Do stuff
+                $('body').on('contextmenu', '#edit', function() {
+
+                    //alert("contextmenu"+event);
+                    document.getElementById("rmenu").className = "hide";
+                    document.getElementById("rmenu").style.top =  mouseY(event) + 'px';
+                    document.getElementById("rmenu").style.left = mouseX(event) + 'px';
+
+                    window.event.returnValue = false;
+                });
+            }
+    });
+});
+
+// this is from another SO post...
+    $(document).bind("click", function(event) {
+        document.getElementById("rmenu").className = "hide";
+    });
+
+
+
+function mouseX(evt) {
+    if (evt.pageX) {
+        return evt.pageX;
+    } else if (evt.clientX) {
+       return evt.clientX + (document.documentElement.scrollLeft ?
+           document.documentElement.scrollLeft :
+           document.body.scrollLeft);
+    } else {
+        return null;
+    }
+}
+
+function mouseY(evt) {
+    if (evt.pageY) {
+        return evt.pageY;
+    } else if (evt.clientY) {
+       return evt.clientY + (document.documentElement.scrollTop ?
+       document.documentElement.scrollTop :
+       document.body.scrollTop);
+    } else {
+        return null;
+    }
+}
+
+if(document.getElementById("profilename").value != ''){
+    document.getElementById("alert3").style.display = "block";
+    document.getElementById("alert1").style.display = "none";
+    document.getElementById("alert2").style.display = "none";
+    document.getElementById("adminname").value = document.getElementById("profilename").value;
+    document.getElementById("adminemail").value = document.getElementById("profileemail").value;
+    document.getElementById("adminpwd").value = document.getElementById("profilepwd").value;
+    document.getElementById("admincompany").value = document.getElementById("profilecompany").value;
+}
+
+</script>
+
+{%else %}
+        <center>
+            <br>
+            <br>
+            <br>
+            <br><br>
+            <h3 class="my_items col-sm-offset-1" style="color:red; margin: 30px;">No Member...</h3></center>
+
+{% endif %}
+
+<script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyABrC1jUQMjJmZJ2p8lnwiECcuKgZeGA7g",
+    authDomain: "scwribe.firebaseapp.com",
+    databaseURL: "https://scwribe.firebaseio.com",
+    projectId: "scwribe",
+    storageBucket: "",
+    messagingSenderId: "915253554092"
+  };
+  firebase.initializeApp(config);
+</script>
+
+<script src="/static/may/js/noti_alert.js"></script>
+<script>
+	function showAlert(){
+		window.location.href = "/get_notifications";
+	}
+	$(document).ready(function() {
+        $('.row #user').each(function(i) {
+            $(this).css('color', getRandomColor());
+        });
+    });
+	function getRandomColor() {
+      var letters = '0123456789ABCDEF';
+      var color = '#';
+      for (var i = 0; i < 6; i++) {
+         color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+   }
+</script>
+
+{% endblock %}
+
+
+
+
+
+
+
+

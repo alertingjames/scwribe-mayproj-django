@@ -1,0 +1,154 @@
+{% extends 'may/base.html' %}
+{% block title %}Okay!{% endblock %}
+{% block body %}
+
+<br>
+<br>
+<br>
+<style>
+
+html, body{
+  background: linear-gradient(0deg,rgba(20,150,250,0.0),rgba(0,100,250,0.6),rgba(0,100,250,0.6),rgba(0,100,250,0.3)), url("/static/may/images/pattern3.jpg") no-repeat center center fixed;
+  background-size:cover;
+}
+
+img {
+  border-radius: 50%;
+  height: 80px;
+  width: 80px;
+}
+
+form h1 {
+  font-size: 21px;
+  color: rgb(255, 255, 255);
+  padding: 19px 22px;
+  border-radius: 5px 5px 0px 0px;
+  margin: auto;
+  text-shadow: none;
+  text-align:middle;
+}
+
+#edit {
+  border-radius: 5px;
+  max-width:500px;
+  width:auto;
+  height:auto;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left:auto;
+  margin-right:auto;
+  <!--background:linear-gradient(30deg,rgba(200,150,250,0.7),rgba(50,200,250,0.7));-->
+  opacity:0.9;
+  overflow: hidden;
+  <!--box-shadow: 25px 25px 0 rgba(0, 0, 0, 0.2);-->
+}
+#edit:hover {
+  <!--background:linear-gradient(0deg,rgba(200,50,250,0.7),rgba(50,200,250,0.7));-->
+}
+
+p span {
+  color: #F00;
+}
+
+p {
+  margin: 0px;
+  font-weight: 600;
+  line-height: 2;
+  color:#fff;
+}
+
+h1 {
+  text-align:center;
+  color: #666;
+  text-shadow: 1px 1px 0px #FFF;
+  margin:50px 0px 0px 0px
+}
+
+a {
+  text-decoration:inherit
+}
+
+.form-group {
+  overflow: hidden;
+  width:100%;
+}
+
+.contentform {
+  padding: 30px;
+  float:middle;
+  margin:auto;
+}
+
+.formcontent {
+  width:100%;
+  float:middle;
+  margin:auto;
+  <!--border-right: 1px dotted #CCC;-->
+  box-sizing: border-box;
+  padding: 0px 0px 0px 0px;
+}
+
+.validation {
+  display:none;
+  margin: 0 0 10px;
+  font-weight:400;
+  font-size:13px;
+  color: #DE5959;
+}
+
+</style>
+
+<script>
+  history.go(-3);
+</script>
+
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../lib/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<!--<meta name="mobile-web-app-capable" content="yes">-->
+<!--<meta name="apple-mobile-web-app-capable" content="yes">-->
+
+<!--<script>-->
+  <!--function launchFullScreen(element) {-->
+  <!--if(element.requestFullScreen) {-->
+    <!--element.requestFullScreen();-->
+  <!--} else if(element.mozRequestFullScreen) {-->
+    <!--element.mozRequestFullScreen();-->
+  <!--} else if(element.webkitRequestFullScreen) {-->
+    <!--element.webkitRequestFullScreen();-->
+  <!--}-->
+<!--}-->
+
+<!--// Launch fullscreen for browsers that support it!-->
+<!--launchFullScreen(document.documentElement); // the whole page-->
+<!--</script>-->
+
+<img src="/static/may/images/processing.gif" class="glyphicon glyphicon-fire" aria-hidden="true" style="position:fixed; left:50%; float:middle;
+	transform:translate(-50%, -50%); width:auto; z-index:100; top:120px; display: none;" id="gif">
+
+<img src="/static/may/images/logo.png" style="position:relative; width:60px; height:60px; border-radius:3%; z-index:100; left:3%;">
+
+  <form id="edit" action="#" method="post" enctype="multipart/form-data">
+	  {% csrf_token %}
+	    <h1>{% if note %}{{note}}{% endif %}</h1>
+</form>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

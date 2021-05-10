@@ -1,0 +1,914 @@
+{% extends 'may/basegroupmeet.html' %}
+{% block title %}Group Meeting{% endblock %}
+{% block body %}
+
+<br>
+<br>
+
+<meta charset="UTF-8">
+<script type="text/javascript" src="https://cdn.rawgit.com/asvd/dragscroll/master/dragscroll.js"></script>
+<script src="https://apis.google.com/js/api.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <style>
+        html, body{
+            background: url("/static/may/images/adminbackground.jpg") no-repeat center center fixed;
+            background-size:cover;
+            overflow:hidden;
+        }
+        #edit {
+            max-width:800px;
+            width:auto;
+            height: 100%;
+            margin-left:auto;
+            margin-right:auto;
+            <!--background:linear-gradient(30deg,rgba(200,150,250,0.7),rgba(50,200,250,0.7));-->
+            opacity:0.9;
+            overflow: hidden;
+            <!--box-shadow: 25px 25px 0 rgba(0, 0, 0, 0.2);-->
+        }
+        .contentform {
+            padding: 0px;
+            float:middle;
+        }
+        .formcontent {
+            width:100%;
+            float:middle;
+            margin:auto;
+            box-sizing: border-box;
+            padding: 0px;
+        }
+
+        input {
+            border-radius: 5px;
+            border: 1px solid #cccccc;
+            width: 100%;
+            height: 42px;
+            float: left;
+            padding: 0px 15px;
+            opacity: 0.9;
+            color: black;
+        }
+
+        select {
+            border-radius: 5px;
+            border: 1px solid #cccccc;
+            width: 100%;
+            height: 42px;
+            float: left;
+            padding: 0px 15px;
+            opacity: 0.9;
+            color: black;
+        }
+
+        #chat_log {
+            border-radius: 5px;
+            border: 1px solid #EEE;
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            float: middle;
+            padding: 150px 15px 100px 15px;
+            opacity: 0.3;
+            color:black;
+            background:linear-gradient(0deg,rgba(250,250,250,0.8),rgba(250,250,250,0.8)),url("/static/may/images/callbackground.jpg");
+            background-size:cover;
+            overflow-y:auto;
+        }
+        #chat_log::-webkit-scrollbar {
+            display: none;
+        }
+        #send-form{
+            width:100%;
+        }
+        div#list {
+            width: 100%;
+            height: auto;
+        }
+
+        div#list > div > div {
+            width: auto;
+            height: auto;
+            padding: 8px 15px 8px 15px;
+            border-radius:15px;
+            margin-bottom: 5px;
+            color: black;
+            word-wrap: break-word;
+        }
+
+        .lang {
+            border-radius: 5px;
+            border: 1px solid #cccccc;
+            width: 46%;
+            height: 25px;
+            float: left;
+            padding: 0px 15px;
+            opacity: 0.9;
+            color: black;
+        }
+
+        #photo {
+            display: none;
+            top:15%;
+        }
+        .aa {
+            display: inline-block;
+        }
+
+        #style::-webkit-scrollbar-track
+        {
+	        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	        background: transparent;
+        }
+
+        #style::-webkit-scrollbar
+        {
+	        height: 0px;
+	        background: transparent;
+        }
+
+        #style::-webkit-scrollbar-thumb
+        {
+	        background: transparent;
+        }
+        .name_text{color:white; padding:5px; border-radius:5px; font-size:11px; height:auto; white-space: nowrap; overflow:hidden; text-overflow: ellipsis;}
+
+        ::-webkit-scrollbar {
+            width: 0px;  /* remove scrollbar space */
+            background: transparent;  /* optional: just make scrollbar invisible */
+        }
+        /* optional: show position indicator in red */
+        ::-webkit-scrollbar-thumb {
+            background: #FF0000;
+        }
+        iframe{overflow:hidden;}
+    </style>
+
+<script>
+	history.pushState(null, null, location.href);
+	window.onpopstate = function () {
+        history.go(1);
+    };
+</script>
+
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<form id="control-panel" style="font-size:16px; font-weight:300;
+	position:fixed; left:50%; float:middle; padding: 8px 15px 15px 15px; background: rgba(255, 255, 255, 0.5); border-radius:5px;
+	transform:translate(-50%, -50%); max-width:450px; width:auto; min-width:360px; z-index:200; top:300px;">
+    <center>
+        <div id="note" style="width:100%; padding:5px; text-align:center;"></div>
+        <div id="message" style="border:0px; background: transparent; color: #737373; padding:8px; height:120px; width:100%; text-align:left; display:none;">
+            <span class="final" id="final_span"></span> <span class="interim" id="interim_span"></span>
+        </div><br>
+        <div id="div_start">
+            <a href="javascript:startButton();">
+                <img alt="Start" id="start_img" src="/static/may/images/mic.gif" style="width:60px; height:60px; border-radius:50px; box-shadow: 0px 0px 30px rgba(0, 0, 0, 1.0);">
+            </a>
+        </div>
+        <div id="div_language" style="width:100%; text-align:center; margin:20px auto;">
+            <select id="select_language" class="lang" style="margin-left:3%;" onchange="updateCountry()"></select>
+            <select id="select_dialect" class="lang" style="margin-left:2%; margin-right:3%;"></select>
+        </div>
+    </center>
+</form>
+
+<div style="text-align:center; scrollbar:none; position:fixed; left:50%; float:middle; transform:translate(-50%, -50%);
+    width:280px; height:auto; z-index:1000; top:100px; display:block; margin-left:60px;" id="userList">
+    <div class="dragscroll" style="white-space: nowrap; border-radius:25px 25px 5px 5px; overflow-y: hidden; overflow: auto; cursor: grab; cursor : -o-grab; cursor : -moz-grab; cursor : -webkit-grab;" id="style">
+
+    </div>
+</div>
+
+<form id="alert" action="javascript:void(0);" method="post" style="font-size:16px; font-weight:300; color: black; box-shadow: 0px 0px 100px rgba(0, 0, 0, 1.0);
+	position:fixed; left:50%; float:middle; background-color:white; border-radius:10px; padding: 8px 15px 15px 15px;
+	transform:translate(-50%, -50%); max-width:450px; width:auto; min-width:360px; z-index:1000; top:350px; display:none;">
+    {% csrf_token %}
+    <a href="javascript:cancel();">
+        <div style="float:right;"><u>Cancel</u></div>
+    </a>
+    <div style="font-size:20px; margin-top:10px;"><i class="fa fa-plus" style="font-size:20px; color:green; padding-right:10px;"></i>Enter here by speech or typing</div>
+	<div style="width:100%; text-align:center;">
+        <p>Urgency <span>*</span></p>
+        <select required id="urgency">
+            <option value="Level0">Level0</option>
+            <option value="Level1">Level1</option>
+            <option value="Level2">Level2</option>
+            <option value="Level3">Level3</option>
+            <option value="Level4">Level4</option>
+        </select>
+        <input type="text" placeholder="Topic" style="margin-top:5px;" required id="topic">
+        <input type="text" placeholder="Summary" style="margin-top:5px;" required id="summary">
+        <input type="text" placeholder="Call of Action" style="margin-top:5px;" required id="callofaction">
+    </div><br>
+    <button style="margin-top:15px; width:100%; text-align:center; padding:8px; border:0px;
+        border-radius:5px; background:#0066cc; color:white; font-size:14px;" formaction="javascript:void(0);" onclick="javascript:if(backF){ transcript(1);} else {transcript(0);}">Submit</button>
+</form>
+
+<div style="position:fixed; left:50%; float:middle; transform:translate(-50%, -50%); z-index:300; top:500px; display:block;">
+    <iframe style="" width="300" height="150" id="video"
+        frameborder="0" src="{{roomlink}}" allowfullscreen></iframe>
+</div>
+
+<div id="edit">
+    <div style="width:auto; height:auto; margin-top:2%; margin-left:2%; position:fixed; z-index:120;">
+        <img src="/static/may/images/groupicon.png" style="max-width:60px; max-height:60px; width:auto; height:auto; border-radius:3px;">
+        <div style="color:black; font-size:16px; height:auto; font-family:cursive;">
+            <strong>{{group.name}}</strong>
+        </div>
+    </div>
+    <div class="contentform">
+        <div class="formcontent">
+            <div id="chat_log">
+                <div id="list" aria-placeholder="No message ..."></div>
+            </div>
+            <div id="send-form" style="width:101%; margin-top:5px; display:none;">
+                <input type="hidden" id="sender_name" value="{{sender.name}}">
+                <input type="hidden" id="sender_id" value="{{sender.id}}">
+                <input type="hidden" id="sender_email" value="{{sender.email}}">
+                <input type="hidden" id="sender_company" value="{{sender.company}}">
+                <input type="hidden" id="group_name" value="{{group.name}}">
+                <input type="hidden" id="group_id" value="{{group.id}}">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyABrC1jUQMjJmZJ2p8lnwiECcuKgZeGA7g",
+    authDomain: "scwribe.firebaseapp.com",
+    databaseURL: "https://scwribe.firebaseio.com",
+    projectId: "scwribe",
+    storageBucket: "",
+    messagingSenderId: "915253554092"
+  };
+  firebase.initializeApp(config);
+</script>
+
+<script>
+    function cancel(){
+        if(backF == true) window.location.href = "/home";
+        else window.location.reload();
+    }
+</script>
+
+<script>
+// If you modify this array, also update default language / dialect below.
+var langs =
+[['Afrikaans',       ['af-ZA']],
+ ['አማርኛ',           ['am-ET']],
+ ['Azərbaycanca',    ['az-AZ']],
+ ['বাংলা',            ['bn-BD', 'বাংলাদেশ'],
+                     ['bn-IN', 'ভারত']],
+ ['Bahasa Indonesia',['id-ID']],
+ ['Bahasa Melayu',   ['ms-MY']],
+ ['Català',          ['ca-ES']],
+ ['Čeština',         ['cs-CZ']],
+ ['Dansk',           ['da-DK']],
+ ['Deutsch',         ['de-DE']],
+ ['English',         ['en-AU', 'Australia'],
+                     ['en-CA', 'Canada'],
+                     ['en-IN', 'India'],
+                     ['en-KE', 'Kenya'],
+                     ['en-TZ', 'Tanzania'],
+                     ['en-GH', 'Ghana'],
+                     ['en-NZ', 'New Zealand'],
+                     ['en-NG', 'Nigeria'],
+                     ['en-ZA', 'South Africa'],
+                     ['en-PH', 'Philippines'],
+                     ['en-GB', 'United Kingdom'],
+                     ['en-US', 'United States']],
+ ['Español',         ['es-AR', 'Argentina'],
+                     ['es-BO', 'Bolivia'],
+                     ['es-CL', 'Chile'],
+                     ['es-CO', 'Colombia'],
+                     ['es-CR', 'Costa Rica'],
+                     ['es-EC', 'Ecuador'],
+                     ['es-SV', 'El Salvador'],
+                     ['es-ES', 'España'],
+                     ['es-US', 'Estados Unidos'],
+                     ['es-GT', 'Guatemala'],
+                     ['es-HN', 'Honduras'],
+                     ['es-MX', 'México'],
+                     ['es-NI', 'Nicaragua'],
+                     ['es-PA', 'Panamá'],
+                     ['es-PY', 'Paraguay'],
+                     ['es-PE', 'Perú'],
+                     ['es-PR', 'Puerto Rico'],
+                     ['es-DO', 'República Dominicana'],
+                     ['es-UY', 'Uruguay'],
+                     ['es-VE', 'Venezuela']],
+ ['Euskara',         ['eu-ES']],
+ ['Filipino',        ['fil-PH']],
+ ['Français',        ['fr-FR']],
+ ['Basa Jawa',       ['jv-ID']],
+ ['Galego',          ['gl-ES']],
+ ['ગુજરાતી',           ['gu-IN']],
+ ['Hrvatski',        ['hr-HR']],
+ ['IsiZulu',         ['zu-ZA']],
+ ['Íslenska',        ['is-IS']],
+ ['Italiano',        ['it-IT', 'Italia'],
+                     ['it-CH', 'Svizzera']],
+ ['ಕನ್ನಡ',             ['kn-IN']],
+ ['ភាសាខ្មែរ',          ['km-KH']],
+ ['Latviešu',        ['lv-LV']],
+ ['Lietuvių',        ['lt-LT']],
+ ['മലയാളം',          ['ml-IN']],
+ ['मराठी',             ['mr-IN']],
+ ['Magyar',          ['hu-HU']],
+ ['ລາວ',              ['lo-LA']],
+ ['Nederlands',      ['nl-NL']],
+ ['नेपाली भाषा',        ['ne-NP']],
+ ['Norsk bokmål',    ['nb-NO']],
+ ['Polski',          ['pl-PL']],
+ ['Português',       ['pt-BR', 'Brasil'],
+                     ['pt-PT', 'Portugal']],
+ ['Română',          ['ro-RO']],
+ ['සිංහල',          ['si-LK']],
+ ['Slovenščina',     ['sl-SI']],
+ ['Basa Sunda',      ['su-ID']],
+ ['Slovenčina',      ['sk-SK']],
+ ['Suomi',           ['fi-FI']],
+ ['Svenska',         ['sv-SE']],
+ ['Kiswahili',       ['sw-TZ', 'Tanzania'],
+                     ['sw-KE', 'Kenya']],
+ ['ქართული',       ['ka-GE']],
+ ['Հայերեն',          ['hy-AM']],
+ ['தமிழ்',            ['ta-IN', 'இந்தியா'],
+                     ['ta-SG', 'சிங்கப்பூர்'],
+                     ['ta-LK', 'இலங்கை'],
+                     ['ta-MY', 'மலேசியா']],
+ ['తెలుగు',           ['te-IN']],
+ ['Tiếng Việt',      ['vi-VN']],
+ ['Türkçe',          ['tr-TR']],
+ ['اُردُو',            ['ur-PK', 'پاکستان'],
+                     ['ur-IN', 'بھارت']],
+ ['Ελληνικά',         ['el-GR']],
+ ['български',         ['bg-BG']],
+ ['Pусский',          ['ru-RU']],
+ ['Српски',           ['sr-RS']],
+ ['Українська',        ['uk-UA']],
+ ['한국어',            ['ko-KR']],
+ ['中文',             ['cmn-Hans-CN', '普通话 (中国大陆)'],
+                     ['cmn-Hans-HK', '普通话 (香港)'],
+                     ['cmn-Hant-TW', '中文 (台灣)'],
+                     ['yue-Hant-HK', '粵語 (香港)']],
+ ['日本語',           ['ja-JP']],
+ ['हिन्दी',             ['hi-IN']],
+ ['ภาษาไทย',         ['th-TH']]];
+
+for (var i = 0; i < langs.length; i++) {
+  select_language.options[i] = new Option(langs[i][0], i);
+}
+// Set default language / dialect.
+select_language.selectedIndex = 10;
+updateCountry();
+select_dialect.selectedIndex = 11;
+
+function updateCountry() {
+  for (var i = select_dialect.options.length - 1; i >= 0; i--) {
+    select_dialect.remove(i);
+  }
+  var list = langs[select_language.selectedIndex];
+  for (var i = 1; i < list.length; i++) {
+    select_dialect.options.add(new Option(list[i][1], list[i][0]));
+  }
+//  select_dialect.style.visibility = list[1].length == 1 ? 'hidden' : 'visible';
+}
+
+var final_transcript = '';
+var recognizing = false;
+var ignore_onend;
+var start_timestamp;
+var buf = '';
+
+var note1 = '';
+
+if (!('webkitSpeechRecognition' in window)) {
+  upgrade();
+}
+else {
+  var recognition = new webkitSpeechRecognition();
+  recognition.continuous = true;
+  recognition.interimResults = false;
+
+  recognition.onstart = function() {
+    recognizing = true;
+    hear('Speak now');
+    start_img.src = '/static/may/images/mic-animate.gif';
+  };
+
+  recognition.onerror = function(event) {
+    if (event.error == 'no-speech') {
+      start_img.src = '/static/may/images/mic.gif';
+      ignore_onend = true;
+    }
+    if (event.error == 'audio-capture') {
+      start_img.src = '/static/may/images/mic.gif';
+      ignore_onend = true;
+    }
+  };
+
+  recognition.onend = function() {
+    recognizing = false;
+    if (ignore_onend) {
+  //    return;
+    }
+    start_img.src = '/static/may/images/mic.gif';
+    keepTalking();
+  };
+
+  recognition.onresult = function(event) {
+    var interim_transcript = '';
+    if (typeof(event.results) == 'undefined') {
+      recognition.onend = null;
+      recognition.stop();
+      upgrade();
+      return;
+    }
+    for (var i = event.resultIndex; i < event.results.length; ++i) {
+      if (event.results[i].isFinal) {
+        final_transcript = event.results[i][0].transcript;
+      } else {
+        interim_transcript += event.results[i][0].transcript;
+      }
+    }
+    final_transcript = capitalize(final_transcript);
+    final_span.innerHTML = linebreak(final_transcript);
+    interim_span.innerHTML = linebreak(interim_transcript);
+
+    if(document.getElementById("alert").style.display == "block"){
+        var focused = document.activeElement;
+        if (!focused || focused == document.body)
+            focused = null;
+        else if (document.querySelector)
+            focused = document.querySelector(":focus");
+        focused.value = final_span.innerHTML;
+        return;
+    }
+
+    if(startHearing) note1 += final_span.innerHTML + " ";
+
+    if (!synth.speaking && startHearing){
+        if(buf != final_span.innerHTML + " " + interim_span.innerHTML){
+            buf = final_span.innerHTML + " " + interim_span.innerHTML;
+            submit();
+        }
+    }
+  };
+}
+
+function upgrade() {
+  start_button.style.visibility = 'hidden';
+}
+
+var two_line = /\n\n/g;
+var one_line = /\n/g;
+function linebreak(s) {
+  return s.replace(two_line, '<p></p>').replace(one_line, '<br>');
+}
+
+var first_char = /\S/;
+function capitalize(s) {
+  return s.replace(first_char, function(m) { return m.toUpperCase(); });
+}
+
+startButton();
+
+function startButton() {
+  if (recognizing) {
+    if((note1 != '' || noteList.length > 0) && userList.length > 0){
+        document.getElementById("alert").style.display = "block";
+        return;
+    }
+    else {
+        recognition.stop();
+        window.location.href = '/meetgroup/' + document.getElementById("group_id").value;
+    }
+  }
+  final_transcript = '';
+  recognition.lang = select_dialect.value;
+  recognition.start();
+  if(noteList.length == 0 && userList.length > 0)
+    start_timestamp = new Date().getTime();
+  final_span.innerHTML = "";
+  interim_span.innerHTML = "";
+  start_img.src = '/static/may/images/mic-slash.gif';
+  note1 = '';
+}
+
+function keepTalking() {
+  recognizing = true;
+  final_transcript = '';
+  recognition.lang = select_dialect.value;
+  recognition.start();
+}
+
+function hear(mes){
+    document.getElementById("note").innerHTML = mes;
+}
+
+function transcript(ii){
+    if(userList.length == 0) return;
+    var topic = document.getElementById("topic");
+    var summary = document.getElementById("summary");
+    var callofaction = document.getElementById("callofaction");
+    if(topic.value == '' || summary.value == '' || callofaction.value == ''){
+        alert("Please fill in the blanks by speech or typing");
+        return;
+    }
+ //   alert(topic.value);
+    recognition.stop();
+    params = {
+      'talker':sender_id,
+      'name':sender_name,
+      'email': sender_email,
+      'company': sender_company,
+      'note':note1,
+      'attendeeids[]':userList,
+      'attendeenotes[]':noteList,
+      'lang':select_dialect.value,
+      'startTime': start_timestamp,
+      'endTime': new Date().getTime(),
+      'urgency': document.getElementById("urgency").value,
+      'topic': topic.value,
+      'summary': summary.value,
+      'callofaction': callofaction.value,
+      'groupid': document.getElementById("group_id").value
+    };
+    post('/grouptranscript/' + ii, params);
+}
+
+function getCookie(name) {
+    console.log('getCookie');
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                    }
+            }
+    }
+    console.log('cookie:' + cookieValue);
+    return cookieValue;
+}
+
+
+</script>
+
+<script>
+var sender_id = document.getElementById("sender_id").value;
+var group_id = document.getElementById("group_id").value;
+var sender_name = document.getElementById("sender_name").value;
+var sender_email = document.getElementById("sender_email").value;
+var sender_company = document.getElementById("sender_company").value;
+var group_name = document.getElementById("group_name").value;
+var final_span = document.getElementById("final_span");
+var interim_span = document.getElementById("interim_span");
+var submitBtn = document.getElementById("submitBtn");
+var chat_log = document.getElementById("chat_log");
+var online = document.getElementById("online");
+var st = document.getElementById("st");
+var startHearing = false;
+var synth = window.speechSynthesis;
+
+var userList = [];
+var noteList = [];
+
+firebase.database().ref('gmusers' + group_id + '/' + sender_id).remove();
+firebase.database().ref('gmusers' + group_id + '/' + sender_id).push().set({
+    sender_name: sender_name,
+    sender_email: sender_email,
+    sender_id: sender_id
+});
+
+function submit(){
+    var messageText = final_span.innerHTML + " " + interim_span.innerHTML;
+    var time = new Date().getTime();
+    if (messageText.length > 1){
+        firebase.database().ref('gmmsg' + group_id).push().set({
+            sender_id: sender_id,
+            sender: sender_name,
+            message: messageText,
+            lang: select_dialect.value,
+            time: time
+        });
+ //       firebase.database().ref('gmnotis' + group_id).remove();
+        firebase.database().ref('gmnotis' + group_id).push().set({
+            sender_id: sender_id,
+            sender: sender_name,
+            message: messageText,
+            lang: select_dialect.value,
+            time: time,
+            sender_id: sender_id
+        });
+        final_span.innerHTML = "";
+        interim_span.innerHTML = "";
+    }else {
+//        window.alert("Please speak something...");
+    }
+}
+
+var starCountRef = firebase.database().ref('gmmsg' + group_id);
+starCountRef.on('child_added', function(snapshot) {
+  var new_post = snapshot.val();
+  var mes = new_post.message;
+  var lang = new_post.lang;
+  var sender = new_post.sender;
+
+  if (mes.length > 0){
+    var time = new_post.time;
+    var date = new Date(time);
+
+    var seconds = date.getSeconds();
+    var minutes = date.getMinutes();
+    var hours = date.getHours();
+
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1; // beware: January = 0; February = 1, etc.
+    var day = date.getDate();
+
+    var ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0'+minutes : minutes;
+    var timeStr = month + '/' + day + '/' + year + ' ' + hours + ':' + minutes + ' ' + ampm;
+
+    var ul = document.getElementById("list");
+    if (new_post.sender_id == sender_id){
+       var li = document.createElement("div");
+       li.style.color = 'white';
+       li.style.fontSize = '16';
+       li.style.paddingRight = '10';
+       li.style.paddingLeft = '10';
+       li.style.paddingTop = '10';
+       li.style.paddingBottom = '10';
+       li.style.backgroundColor = '#2390f6';
+       li.style.maxWidth = "300";
+       li.style.display = 'inline-block';
+       li.innerHTML = mes;
+       li.style.textAlign = 'left';
+       var ul2 = document.createElement("div");
+
+       ul2.append(li);
+       ul2.style.textAlign = 'right';
+       ul.appendChild(ul2);
+
+       var lli = document.createElement("div");
+       lli.style.color = 'black';
+       lli.style.fontSize = '12';
+       lli.style.display = 'inline-block';
+       lli.innerHTML = timeStr;
+       lli.style.textAlign = 'left';
+       var ull2 = document.createElement("div");
+
+       ull2.append(lli);
+       ull2.style.textAlign = 'right';
+
+       ul.appendChild(ull2);
+
+    }else {
+
+       var usr = document.createElement("div");
+       usr.style.textAlign = 'left';
+       usr.style.color = 'red';
+       usr.style.fontSize = '12';
+
+       usr.style.display = 'inline-block';
+       usr.innerHTML = sender;
+       var div = document.createElement("div");
+
+       div.append(usr);
+       ul.appendChild(div);
+
+       var li = document.createElement("div");
+       li.style.textAlign = 'left';
+       li.style.color = 'black';
+       li.style.fontSize = '16';
+       li.style.paddingRight = '10';
+       li.style.paddingLeft = '10';
+       li.style.paddingTop = '10';
+       li.style.paddingBottom = '10';
+       li.style.backgroundColor = '#e0d0f6';
+       li.style.maxWidth = "300";
+       li.style.display = 'inline-block';
+
+       var langa = lang;
+       var langb = select_dialect.value;
+       
+       if (langa == 'cmn-Hans-CN' || langa == 'cmn-Hans-HK') langa = 'zh-CN';
+       else if (langa == 'cmn-Hant-TW' || langa == 'yue-Hant-HK') langa = 'zh-TW';
+       else langa = lang.substring(0, 2);
+       
+       if (langb == 'cmn-Hans-CN' || langb == 'cmn-Hans-HK') langb = 'zh-CN';
+       else if (langb == 'cmn-Hant-TW' || langb == 'yue-Hant-HK') langb = 'zh-TW';
+       else langb = select_dialect.value.substring(0, 2);
+                
+       if (langa != langb){
+            function trans(){
+                // Initializes the client with the API key and the Translate API.
+                gapi.client.init({
+                    'apiKey': 'AIzaSyDFZqN95OWA8TYOXEF24C2ES51mUjL7gMw',
+                    'discoveryDocs': ['https://www.googleapis.com/discovery/v1/apis/translate/v2/rest'],
+                }).then(function() {
+                    // Executes an API request, and returns a Promise.
+                    // The method name `language.translations.list` comes from the API discovery.
+                    return gapi.client.language.translations.list({
+                        q: mes,
+                        source: langa,
+                        target: langb,
+                    });
+                }).then(function(response) {
+                    console.log(response.result.data.translations[0].translatedText);
+                    li.innerHTML = response.result.data.translations[0].translatedText;
+                    voice(li.innerHTML);
+                }, function(reason) {
+                    console.log('Error: ' + reason.result.error.message);
+                    li.innerHTML = mes;
+                    voice(li.innerHTML);
+                });
+            }
+            // Loads the JavaScript client library and invokes `start` afterwards.
+            gapi.load('client', trans);
+       }else{
+            li.innerHTML = mes;
+            voice(li.innerHTML);
+       }
+
+       var ul3 = document.createElement("div");
+
+       ul3.append(li);
+       ul.appendChild(ul3);
+
+       var llli = document.createElement("div");
+       llli.style.textAlign = 'left';
+       llli.style.color = 'black';
+       llli.style.fontSize = '12';
+
+       llli.style.display = 'inline-block';
+       llli.innerHTML = timeStr;
+       var ull3 = document.createElement("div");
+
+       ull3.append(llli);
+       ul.appendChild(ull3);
+
+       online.innerHTML = new_post.online;
+       st.innerHTML = new_post.online;
+       st.style.display = 'inline-block';
+
+   //    hear(mes);
+       chat_log.scrollTop = chat_log.scrollHeight;
+       if(userList.includes(new_post.sender_id) && startHearing){
+           var index = userList.indexOf(new_post.sender_id);
+           if(typeof noteList[index] === 'undefined') {
+                noteList.insert(index, li.innerHTML);
+           }
+           else {
+                noteList[index] += li.innerHTML + " ";
+           }
+       }
+    }
+
+    chat_log.scrollTop = chat_log.scrollHeight;
+
+  }
+
+  chat_log.scrollTop = chat_log.scrollHeight;
+
+});
+
+setTimeout(function(){ startHearing = true; }, 10000);
+
+var dragscroll = document.getElementById("style");
+
+setInterval(refreshUsers, 5000);
+
+function refreshUsers(){
+
+dragscroll.innerHTML = "";
+
+var starCountRef = firebase.database().ref('gmusers' + group_id);
+starCountRef.on('child_added', function(snapshot) {
+    var starCountRef2 = firebase.database().ref('gmusers' + group_id + "/" + snapshot.key);
+    starCountRef2.on('child_added', function(snapshot2) {
+        var user_info = snapshot2.val();
+        var sender_name = user_info.sender_name;
+        var sender_email = user_info.sender_email;
+
+        var slide = document.createElement("div");
+        slide.style.display = 'inline-block';
+        slide.style.padding = '3px';
+        slide.innerHTML='<i class="fa fa-user-circle-o" style="font-size:50px;"></i>';
+        var namebox = document.createElement("div");
+        namebox.className = "name_text";
+        namebox.innerHTML = sender_name;
+        namebox.style.background = getRandomColor();
+        slide.append(namebox);
+        var emailbox = document.createElement("div");
+        emailbox.innerHTML = sender_email;
+        emailbox.style.display = "none";
+        slide.append(emailbox);
+        slide.onclick = function(){
+            firebase.database().ref('gmusers' + group_id + '/' + sender_id).remove();
+            window.location.href = "/meet/" + snapshot.key;
+        }
+        dragscroll.appendChild(slide);
+
+        if(!userList.includes(user_info.sender_id) && user_info.sender_id != sender_id) {
+            userList.push(user_info.sender_id);
+        }
+    });
+});
+
+$(document).ready(function() {
+   $('.dragscroll .fa').each(function(i) {
+      $(this).css('color', getRandomColor());
+   });
+   $('.dragscroll .name_text').each(function(i) {
+      $(this).css('background-color', getRandomColor());
+   });
+});
+
+}
+
+
+function getRandomColor() {
+   var letters = '0123456789ABCDEF';
+   var color = '#';
+   for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+   }
+   return color;
+}
+
+function post(path, params, method) {
+   method = method || "post"; // Set method to post by default if not specified.
+
+   // The rest of this code assumes you are not using a library.
+   // It can be made less wordy if you use one.
+   var form = document.createElement("form");
+   form.setAttribute("method", method);
+   form.setAttribute("action", path);
+
+   for(var key in params) {
+      if(params.hasOwnProperty(key)) {
+          var hiddenField = document.createElement("input");
+          hiddenField.setAttribute("type", "hidden");
+          hiddenField.setAttribute("name", key);
+          hiddenField.setAttribute("value", params[key]);
+
+          form.appendChild(hiddenField);
+      }
+   }
+
+   var hiddenField1 = document.createElement("input");
+   hiddenField1.setAttribute("type", "hidden");
+   hiddenField1.setAttribute("name", 'csrfmiddlewaretoken');
+   hiddenField1.setAttribute("value", getCookie('csrftoken'));
+   form.appendChild(hiddenField1);
+
+   document.body.appendChild(form);
+   form.submit();
+}
+
+</script>
+
+<script>
+function voice(message){
+  if(startHearing){
+      if (note1 == '' && noteList.length == 0) start_timestamp = new Date().getTime();
+      var msg = new SpeechSynthesisUtterance();
+      var voices = synth.getVoices();
+      msg.voice = voices.filter(function(voice) { return voice.name == 'Alex'; })[0];
+      msg.text = message;
+      var lang = select_dialect.value;
+      if (lang == 'cmn-Hans-CN' || lang == 'cmn-Hans-HK') lang = 'zh-CN';
+      else if (lang == 'cmn-Hant-TW' || lang == 'yue-Hant-HK') lang = 'zh-TW';
+      else if (lang == 'ru-Ru') msg.voice = voices[17];
+      msg.lang = lang;
+      msg.pitch = 1;
+      synth.speak(msg);
+  }
+}
+</script>
+
+{% endblock %}
+
+
+
+
+
+

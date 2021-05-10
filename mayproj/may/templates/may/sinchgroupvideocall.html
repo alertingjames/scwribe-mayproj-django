@@ -1,0 +1,122 @@
+<html>
+<head>
+	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	<meta content="utf-8" http-equiv="encoding">
+	<title>Scwribe Video Call Talking Room ID</title>
+	<link rel="stylesheet" href="/static/may/style/style.css"/>
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="/static/may/js/sinch.min.js"></script>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../lib/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<style>
+		html, body{
+            background: url("/static/may/images/adminbackground.jpg") no-repeat center center fixed;
+            background-size:cover;
+            overflow:hidden;
+        }
+		video{width:100px; height:100px;}
+	</style>
+</head>
+
+<body>
+	<div class="top1" hidden>
+		<img class="instructions" src="/static/may/style/instructions.png">
+		<h1>Group video calling</h1>
+	</div>
+
+	<div id="chromeWarning" class="big" hidden>
+		<b style="color: red;">Warning!</b> Chrome is the only supported browser atm.
+	</div>
+
+	<div class="container" style="padding:20px;">
+		<!--<a href="./">New conference</a>-->
+		<div class="clearfix"></div>
+
+		<video id="me" autoplay></video>
+		<video id="other0" autoplay></video>
+		<video id="other1" autoplay></video>
+		<video id="other2" autoplay></video>
+		<video id="other3" autoplay></video>
+		<video id="other4" autoplay></video>
+
+	</div>
+	<br>
+	<br>
+	<br>
+	<button style="font-size:22px; position:fixed; left:50%; float:middle; transform:translate(-50%, -50%); margin-top:250px; border-radius:8px;"
+			onclick="javascript:post('/createTalkingRoom', {'link': document.URL});">NEXT</button>
+
+	<input type="hidden" id="flag" value="{{createTalkingRoomF}}">
+
+	<script src="/static/may/js/GROUPVIDEOsample.js"></script>
+<script>
+
+var flag = document.getElementById("flag").value;
+if(flag == '1'){
+	setTimeout(function() {
+  		//your code to be executed after 1 second
+  		post('/createTalkingRoom', {'link': document.URL});
+	}, 500);
+}
+// else{alert(document.URL);}
+
+function getCookie(name) {
+    console.log('getCookie');
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                    }
+            }
+    }
+    console.log('cookie:' + cookieValue);
+    return cookieValue;
+}
+
+function post(path, params, method) {
+   method = method || "post"; // Set method to post by default if not specified.
+
+   // The rest of this code assumes you are not using a library.
+   // It can be made less wordy if you use one.
+   var form = document.createElement("form");
+   form.setAttribute("method", method);
+   form.setAttribute("action", path);
+
+   for(var key in params) {
+      if(params.hasOwnProperty(key)) {
+          var hiddenField = document.createElement("input");
+          hiddenField.setAttribute("type", "hidden");
+          hiddenField.setAttribute("name", key);
+          hiddenField.setAttribute("value", params[key]);
+
+          form.appendChild(hiddenField);
+      }
+   }
+
+   var hiddenField1 = document.createElement("input");
+   hiddenField1.setAttribute("type", "hidden");
+   hiddenField1.setAttribute("name", 'csrfmiddlewaretoken');
+   hiddenField1.setAttribute("value", getCookie('csrftoken'));
+   form.appendChild(hiddenField1);
+
+   document.body.appendChild(form);
+   form.submit();
+}
+</script>
+</body>
+
+</html>
+
+
+
+

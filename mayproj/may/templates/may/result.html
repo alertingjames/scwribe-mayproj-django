@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Result & Response</title>
+    <style>
+        html, body{
+            background: linear-gradient(0deg,rgba(20,150,250,0.0),rgba(0,100,250,0.6),rgba(0,100,250,0.6),rgba(0,100,250,0.3)), url("/static/may/images/pattern3.jpg") no-repeat center center fixed;
+            background-size:cover;
+        }
+    </style>
+</head>
+<body>
+<input type="hidden" id="response" value="{{response}}">
+{% if response %}
+<script>
+    alert(document.getElementById("response").value);
+    history.go(-1);
+</script>
+{% endif %}
+</body>
+</html>

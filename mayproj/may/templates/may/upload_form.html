@@ -1,0 +1,125 @@
+{% extends 'may/baseadmin.html' %}
+{% block title %}{{title}}{% endblock %}
+{% block body %}
+
+<br>
+
+<style>
+
+html, body{
+  background: url("/static/may/images/adminbackground.jpg") no-repeat center center fixed;
+  background-size:cover;
+}
+
+    #upload_form{
+        border-radius: 10px;
+        max-width:350px;
+        width:auto;
+        height:auto;
+        padding:10px;
+        margin-left:auto;
+        margin-right:auto;
+        box-shadow: 15px 15px 0 rgba(0, 0, 0, 0.2);
+        background: white url("/static/may/images/pattern3.jpg");
+        background-size:cover;
+        overflow: hidden;
+        opacity:0.9;
+    }
+
+label.cameraButton {
+  display: inline-block;
+  /* Styles to make it look like a button */
+  padding: 0.5em;
+  border: 2px solid #666;
+  border-color: #EEE #CCC #CCC #EEE;
+  border-radius:8px;
+  font-size:16px;
+  color:white;
+  width:200px;
+  height:45px;
+  text-align:middle;
+  background-color: green;
+}
+</style>
+
+<script>
+	history.pushState(null, null, location.href);
+	window.onpopstate = function () {
+        history.go(1);
+    };
+</script>
+
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../lib/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<!--<meta name="mobile-web-app-capable" content="yes">-->
+<!--<meta name="apple-mobile-web-app-capable" content="yes">-->
+
+<!--<script>-->
+  <!--function launchFullScreen(element) {-->
+  <!--if(element.requestFullScreen) {-->
+    <!--element.requestFullScreen();-->
+  <!--} else if(element.mozRequestFullScreen) {-->
+    <!--element.mozRequestFullScreen();-->
+  <!--} else if(element.webkitRequestFullScreen) {-->
+    <!--element.webkitRequestFullScreen();-->
+  <!--}-->
+<!--}-->
+
+<!--// Launch fullscreen for browsers that support it!-->
+<!--launchFullScreen(document.documentElement); // the whole page-->
+<!--</script>-->
+
+<img src="/static/may/images/logo.png" style="position:relative; width:60px; height:60px; border-radius:50%; z-index:100; left:3%; margin-top:80px;">
+
+<img src="/static/may/images/processing.gif" class="glyphicon glyphicon-fire" aria-hidden="true" style="position:fixed; left:50%; float:middle;
+	transform:translate(-50%, -50%); width:80px; height:80px; z-index:100; top:120px; display: none; border-radius:50%;" id="gif">
+
+<div id="upload_form" align="center" style="margin-top:60px;">
+    <h4 align="center" style="color:orange; font-weight:700;"><img src="/static/may/images/excelicon.png" style="width:40px; height:40px; margin-right:10px;">{{header}}</h4>
+
+    {% if note %}
+        <p style="color: red; font-size:18px;">
+            Error of reading file!   Invalid File...<br><br>
+            <a href="/import_view_member" style="font-size:16px; text-decoration: underline;">Please click here and select a valid Excel file!</a>
+        </p>
+    {% endif %}
+    <!--{% if note %}-->
+    {% if form.errors %}
+        <p style="color: red;">
+            Please correct the error{{ form.errors|pluralize }} below.
+        </p>
+    {% endif %}
+    <!--{% endif %}-->
+    <img id="note_for_loaded" src="/static/may/images/checkloaded.png" style="width:30px; height:30px; display:none; float:right; position:fixed; margin-top:20px; margin-left:20px;">
+
+    <form action="{% url 'import_member_data' %}" enctype="multipart/form-data"  method="post" style="margin-top:30px;">
+        <label class="cameraButton" style="text-align:center;" onchange="javascript:document.getElementById('note_for_loaded').style.display='block';">Select Excel File
+            <table style="display:none;">
+                {{ form.as_table }}
+            </table>
+        </label>
+        {% csrf_token %}
+        <!--<input type="submit" value="Submit" style="margin-top:30px; margin-left:150px;">-->
+
+        {% if not note %}
+            <center><button type="submit" class="btn btn-success" onclick="progressBar()" style="margin-top:30px; margin-bottom:10px;"> Submit </button></center>
+        {% endif %}
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    $( function() {
+        $( "#upload_form" ).draggable();
+    } );
+    function progressBar(){
+        document.getElementById("gif").style.display = "block";
+    }
+</script>
+
+{% endblock %}

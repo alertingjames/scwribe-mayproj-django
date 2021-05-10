@@ -1,0 +1,436 @@
+{% extends 'may/basemynotes.html' %}
+{% block title %}My Transcripts{% endblock %}
+{% block body %}
+<br>
+<br>
+<br>
+<br>
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid Sans">
+<style>
+
+html, body{
+  background: linear-gradient(0deg,rgba(20,150,250,0.0),rgba(0,100,250,0.0),rgba(0,100,250,0.3),rgba(0,100,250,0.0)), url("/static/may/images/callbackground.jpg") no-repeat center center fixed;
+  background-size:cover;
+}
+
+img {
+  border-radius: 5%;
+  height: 80px;
+  width: 80px;
+}
+
+#myBtn {
+  display: none;
+  position: fixed;
+  bottom: 80px;
+  right: 10px;
+  z-index: 99;
+  border: none;
+  outline: none;
+  background-color: red;
+  color: white;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 15px;
+}
+
+#myBtn:hover {
+  background-color: blue;
+}
+#admin{
+    display:none;
+}
+
+.info p {
+  text-align:center;
+  color: #999;
+  text-transform:none;
+  font-weight:600;
+  font-size:15px;
+  margin-top:2px
+}
+
+.info i {
+  color:#F6AA93;
+}
+
+#edit {
+  border-radius: 5px;
+  max-width:550px;
+  width:auto;
+  margin:auto;
+  background: url("/static/may/images/pattern2.jpg");
+  background-size:cover;
+  overflow: hidden;
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.3);
+  opacity:0.8;
+}
+#edit:hover {
+  background: url("/static/may/images/pattern1.jpg");
+  background-size:cover;
+}
+
+p span {
+  color: #F00;
+}
+
+p {
+  margin: 0px;
+  font-weight: 200;
+  line-height: 2;
+  color:#fff;
+}
+
+input {
+  border-radius: 5px;
+  border: 1px solid #cccccc;
+  width: 100%;
+  height: 42px;
+  float: left;
+  padding: 0px 15px;
+  opacity: 0.9;
+  color: black;
+}
+
+
+.form-group {
+  overflow: hidden;
+  width:100%;
+}
+
+.icon-case {
+  width: 8%;
+  float: left;
+  border-radius: 5px 0px 0px 5px;
+  background:green;
+  height:42px;
+  position: relative;
+  text-align: center;
+  line-height:40px;
+  padding-top:11px;
+}
+
+i {
+  color:yellow;
+}
+
+.contentform {
+  padding: 10px 10px;
+}
+
+.time{float:left; color: orange; font-family: verdana; font-size: 120%;}
+
+label input {
+  display: none;/* <-- hide the default checkbox */
+}
+label span {/* <-- style the artificial checkbox */
+  height: 35px;
+  width: 35px;
+  padding-bottom:6px;
+  margin-right:5px;
+  display: inline-block;
+  position: relative;
+}
+[type=checkbox]:checked + span:before {/* <-- style its checked state..with a ticked icon */
+  content: '\2714';
+  position: absolute;
+  font-size:30px;
+  top: 0px;
+  left: 2px;
+}
+
+[type=checkbox]:checked + span:after {/* <-- style its checked state..with a ticked icon */
+  content: '\2714';
+  position: absolute;
+  top: 0px;
+  bottom:5px;
+  left: 2px;
+  font-size:30px;
+  color:red;
+}
+
+.show {
+    z-index:1000;
+    position: absolute;
+    background-color:#ffffff;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+    padding:8px 12px;
+    border-radius:20px;
+    width:auto;
+    font-size:16px;
+    margin: 0;
+    color:black;
+    font-weight:600;
+}
+
+.hide {
+    display: none;
+}
+
+.topic{color:black; font-size:14px; font-weight:300;}
+
+</style>
+
+<!--<script>-->
+	<!--history.pushState(null, null, location.href);-->
+	<!--window.onpopstate = function () {-->
+        <!--history.go(1);-->
+    <!--};-->
+<!--</script>-->
+
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../lib/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<!--<meta name="mobile-web-app-capable" content="yes">-->
+<!--<meta name="apple-mobile-web-app-capable" content="yes">-->
+
+<!--<script>-->
+  <!--function launchFullScreen(element) {-->
+  <!--if(element.requestFullScreen) {-->
+    <!--element.requestFullScreen();-->
+  <!--} else if(element.mozRequestFullScreen) {-->
+    <!--element.mozRequestFullScreen();-->
+  <!--} else if(element.webkitRequestFullScreen) {-->
+    <!--element.webkitRequestFullScreen();-->
+  <!--}-->
+<!--}-->
+
+<!--// Launch fullscreen for browsers that support it!-->
+<!--launchFullScreen(document.documentElement); // the whole page-->
+<!--</script>-->
+
+<div id="title" style="font-size:25px; font-weight:800; color: #F7D479; text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.7); text-align:center; font-family:'Droid Sans', serif;
+	position:fixed; left:50%; float:middle; transform:translate(-50%, -50%); width:350px; z-index:100; top:92px; display:none;">MY TRANSCRIPTS</div>
+
+<img src="/static/may/images/logo.png" style="position:relative; width:60px; height:60px; border-radius:50%; z-index:100; left:3%;">
+
+{% if notes %}
+<div style="width:100%; height:100%; padding-top:1%; padding-bottom:3%;">
+    <div style="font-size:25px; font-weight:800; margin-bottom:30px; font-family:'Droid Sans', serif;
+        color: #F7D479; text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.7); text-align:center; width:100%;">MY TRANSCRIPTS</div>
+    <form action="/deletenote/{{user_id}}" method="post">
+        {% csrf_token %}
+        <div class="container-fluid" style="margin-top:2%;">
+            <div class="row">
+                {% for note in notes %}
+                <div class="col-sm-4" style="padding-bottom:15px;">
+                    <div id="edit">
+                        <div class="contentform">
+                            <div style="width:100%; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">
+                                <i class="fa fa-clock-o" style="float:left; font-size:25px; color:#04a2be; margin-right:10px;"></i>
+                                <div class="time">{{note.start_time}}</div> <div style="float:left; text-align:center;"> --- </div> <div class="time">{{note.end_time}}</div>
+                                <div id="date" style="float:right; color:#006666; font-size:18px; font-weight:600; font-family:'Droid Sans';">{{note.end_time}}</div>
+                            </div><br>
+                            <div style="width:100%; max-height:150px; padding-left:15px; padding-right:15px;">
+                                <div style="text-align:center; color: #04a2be; font-weight:600; font-size:16px; width:100%;">
+                                    <div style="text-align:left; display:inline-block; max-width:95%;">
+                                        <label class="topic">Urgency:</label> {{note.urgency}}
+                                        <br>
+                                        <i style="color:#04a2be; font-size:20px; margin-right:10px;" class="fa fa-user-circle"></i><label class="topic">Meeting Attendees:</label>
+                                        {% for attendee in attendees %}
+                                            {% if forloop.counter0 == forloop.parentloop.counter0 %}
+                                                {% for att in attendee %}
+                                                    <label style="margin-right:8px;">{{att.name}}, </label>
+                                                {% endfor %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        <br>
+                                        <div style="text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">
+                                            <label class="topic">Topic:</label> {{note.topic}}
+                                        </div>
+                                        <div style="text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">
+                                            <label class="topic">Summary:</label> {{note.summary}}
+                                        </div>
+                                        <div style="text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">
+                                            <label class="topic">Call of Action Required:</label> {{note.callofaction}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div align="right" style="float:left; width:100%; padding-bottom:8px;">
+                                <a href="javascript:void(0)" style="display:inline-block;">
+                                    <label style="margin-right:10px; color: #04a2be; border-radius:5px; font-size:16px; font-family:verdana;">
+                                        <input type="checkbox" name="items[]" value="{{note.id}}" class="chx" style="width:15px; height:15px;" onchange="highlight(this)">
+                                        <span></span><i class="fa fa-trash" style="color: #04a2be; font-size:22px; padding-right:5px;"></i>
+                                    </label>
+                                </a>
+                                <a href="/notedetail/{{note.id}}/{{user_id}}" class="btn btn-info btn-lg" style="padding:8px; font-size:16px;">
+                                    <span class="glyphicon glyphicon-list-alt" style="padding-right:5px;"></span>Detail
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <input type="submit"  id="rmenu" value="Delete" class="hide" onclick="javascript:return confirm('Are you sure delete transcripts selected?');">
+        </div>
+    </form>
+</div>
+<input type="hidden" id="user_id" value="{{user_id}}">
+<script>var user_id = document.getElementById("user_id").value;</script>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+<button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+
+<script>
+// When the user scrolls down 20px from the top of the document, show the button
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+    if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
+        document.getElementById("myBtn").style.display = "block";
+        document.getElementById("title").style.display = "block";
+    } else {
+        document.getElementById("myBtn").style.display = "none";
+        document.getElementById("title").style.display = "none";
+    }
+}
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+}
+
+var m = 0;
+function highlight(obj){
+   if(obj.checked) {
+      $(obj).parent().parent().css("background","yellow");
+      m++;
+   }else{ $(obj).parent().parent().css("background","transparent");m--;}
+}
+
+$(document).ready(function() {
+    $(".chx").change(function() {
+            if(m>0) {
+                //Do stuff
+                $('body').on('contextmenu', '#edit', function() {
+
+                    //alert("contextmenu"+event);
+                    document.getElementById("rmenu").className = "show";
+                    document.getElementById("rmenu").style.top =  mouseY(event) + 'px';
+                    document.getElementById("rmenu").style.left = mouseX(event) + 'px';
+
+                    window.event.returnValue = false;
+                });
+            }
+            else {
+                //Do stuff
+                $('body').on('contextmenu', '#edit', function() {
+
+                    //alert("contextmenu"+event);
+                    document.getElementById("rmenu").className = "hide";
+                    document.getElementById("rmenu").style.top =  mouseY(event) + 'px';
+                    document.getElementById("rmenu").style.left = mouseX(event) + 'px';
+
+                    window.event.returnValue = false;
+                });
+            }
+    });
+});
+
+// this is from another SO post...
+    $(document).bind("click", function(event) {
+        document.getElementById("rmenu").className = "hide";
+    });
+
+
+
+function mouseX(evt) {
+    if (evt.pageX) {
+        return evt.pageX;
+    } else if (evt.clientX) {
+       return evt.clientX + (document.documentElement.scrollLeft ?
+           document.documentElement.scrollLeft :
+           document.body.scrollLeft);
+    } else {
+        return null;
+    }
+}
+
+function mouseY(evt) {
+    if (evt.pageY) {
+        return evt.pageY;
+    } else if (evt.clientY) {
+       return evt.clientY + (document.documentElement.scrollTop ?
+       document.documentElement.scrollTop :
+       document.body.scrollTop);
+    } else {
+        return null;
+    }
+}
+
+</script>
+
+<script>
+   $(document).ready(function() {
+        $('.row #user').each(function(i) {
+            $(this).css('color', getRandomColor());
+        });
+        $('.row .time').each(function(i) {
+            this.innerHTML = getTime(parseInt(this.innerHTML));
+        });
+        $('.row #date').each(function(i) {
+            this.innerHTML = getDate(parseInt(this.innerHTML));
+        });
+   });
+   function getRandomColor() {
+      var letters = '0123456789ABCDEF';
+      var color = '#';
+      for (var i = 0; i < 6; i++) {
+         color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+   }
+   function getTime(ms){
+        var date = new Date(ms);
+        var seconds = date.getSeconds();
+        var minutes = date.getMinutes();
+        var hours = date.getHours();
+
+        var ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        minutes = minutes < 10 ? '0'+minutes : minutes;
+        var timeStr = hours + ':' + minutes + ' ' + ampm;
+        return timeStr;
+   }
+   function getDate(ms){
+        var months = ['January', 'Febrary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        var date = new Date(ms);
+        var seconds = date.getSeconds();
+        var minutes = date.getMinutes();
+        var hours = date.getHours();
+
+        var year = date.getFullYear();
+        var month = date.getMonth(); // beware: January = 0; February = 1, etc.
+        var day = date.getDate();
+
+        var dateStr = months[month] + ' ' + day + ', ' + year;
+        return dateStr;
+   }
+</script>
+
+{%else %}
+        <center>
+            <br>
+            <br>
+            <br>
+            <br><br>
+            <h3 class="my_items col-sm-offset-1" style="color:red; margin: 30px;">No transcript of meeting that person ...</h3></center>
+
+{% endif %}
+{% endblock %}
+
+
+
+
+
+
+
+

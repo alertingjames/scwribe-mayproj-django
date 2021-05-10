@@ -1,0 +1,246 @@
+{% extends 'may/base.html' %}
+{% block title %}Scwribe{% endblock %}
+{% block body %}
+<br>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<meta charset="utf-8">
+<meta content="stuff, to, help, search, engines, not" name="keywords">
+<meta content="What this page is about." name="description">
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Josefin Slab">
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid Sans">
+
+<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js"></script>
+  <script>
+      WebFont.load({
+      google: {
+      families: ["Lato:100,300,400,700,900","Karla:regular","Cookie:regular"]
+    }
+    });
+</script>
+
+<style>
+
+html, body{
+  background: url("/static/may/images/originalbackground.jpg") no-repeat center center fixed;
+  background-size:cover;
+}
+
+
+#myBtn {
+  display: none;
+  position: fixed;
+  bottom: 80px;
+  right: 10px;
+  z-index: 99;
+  border: none;
+  outline: none;
+  background-color: red;
+  color: white;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 15px;
+}
+
+#myBtn:hover {
+  background-color: blue;
+}
+#admin{
+    display:none;
+}
+
+h1 {
+  font-size: 21px;
+  color: rgb(255, 255, 255);
+  padding: 19px 22px;
+  text-shadow: none;
+  text-align:center;
+  color: #666;
+}
+
+.form {
+  max-width:550px;
+  width:100%;
+  margin:auto;
+}
+
+.form-group {
+  overflow: hidden;
+  border-radius: 5px;
+  width:100%;
+  box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.3);
+}
+
+.contentform {
+  padding: 20px;
+}
+
+div.home-large-btn {
+  display: inline-block;
+  border: 2px solid #fff;
+  border-color: #EEE #CCC #CCC #EEE;
+  background-color: white;
+  text-align: center;
+  width: 100%;
+  height:230px;
+  border-radius: 10px;
+  cursor: pointer;
+  position: relative;
+}
+
+div.home-large-btn2 {
+  display: inline-block;
+//  border: 2px solid #fff;
+//  border-color: #EEE #CCC #CCC #EEE;
+//  background-color: white;
+  text-align: center;
+  width: 100%;
+  height:100px;
+  border-radius: 10px;
+  cursor: pointer;
+  position: relative;
+}
+
+.btn-text {
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    width:100%;
+    font-size:25px;
+    color:#eee;
+    font-weight:800;
+    transform: translate(-50%, -50%);
+    text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.7);
+}
+
+.btn-text2 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width:100%;
+    font-size:35px;
+    color:#0099ff;
+    font-family: 'Droid Sans', serif;
+    font-weight:800;
+    transform: translate(-50%, -50%);
+    text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.6);
+}
+
+</style>
+
+<!--<script>-->
+    <!--var msg = new SpeechSynthesisUtterance('Cayley! Really we will win surely!!!');-->
+    <!--window.speechSynthesis.speak(msg);-->
+<!--</script>-->
+
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../lib/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<img src="/static/may/images/logo.jpg" style="position:relative; width:60px; height:60px; border-radius:50%; border:2px solid yellow; z-index:100; left:3%;">
+
+<div style="width:100%; height:84%;">
+    <div style="font-size:25px; font-weight:800; margin-bottom:30px; margin-top:15px; font-family: 'verdana', serif;
+        color: #000; text-align:center; width:100%;">Login As</div>
+    <div class="form">
+        <!--<input type="hidden" id="user_id" value="{{user_id}}">-->
+        <div class="contentform">
+            <div class="form-group" style="display:block;" id="company">
+                <div class="home-large-btn2" onclick="comlogin()">
+                    <center>
+                        <!--<img src="/static/may/images/company.jpg" style="width:100%; height:100%; border-radius:8px;">-->
+                        <div class="btn-text2">COMPANY</div>
+                        <!--<img src="/static/may/images/com.jpg" style="width:120px; height:auto; position:absolute; top:10px; left:10px;">-->
+                    </center>
+                </div>
+            </div>
+            <div class="form-group" style="display:block; margin-top:20px;" id="individual">
+                <div class="home-large-btn2" onclick="login()">
+                    <center>
+                        <!--<img src="/static/may/images/individual.jpg" style="width:100%; height:100%; border-radius:8px;">-->
+                        <div class="btn-text2">INDIVIDUAL</div>
+                        <!--<img src="/static/may/images/logo.png" style="width:60px; height:auto; position:absolute; top:10px; left:10px;">-->
+                    </center>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+<button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+
+<script>
+// When the user scrolls down 20px from the top of the document, show the button
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+    if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
+        document.getElementById("myBtn").style.display = "block";
+        document.getElementById("title").style.display = "block";
+    } else {
+        document.getElementById("myBtn").style.display = "none";
+        document.getElementById("title").style.display = "none";
+    }
+}
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+}
+</script>
+
+<script>
+    var param = '';
+    function comlogin(){
+        window.location.href = "/tocomlogin";
+    }
+    function login(){
+        window.location.href = "/tologin";
+    }
+    function shop(){
+        param = {'item':'shop'};
+        post('/act', param);
+    }
+
+    function post(path, params, method) {
+        method = method || "post"; // Set method to post by default if not specified.
+
+        // The rest of this code assumes you are not using a library.
+        // It can be made less wordy if you use one.
+        var form = document.createElement("form");
+        form.setAttribute("method", method);
+        form.setAttribute("action", path);
+
+        for(var key in params) {
+            if(params.hasOwnProperty(key)) {
+                var hiddenField = document.createElement("input");
+                hiddenField.setAttribute("type", "hidden");
+                hiddenField.setAttribute("name", key);
+                hiddenField.setAttribute("value", params[key]);
+
+                form.appendChild(hiddenField);
+            }
+        }
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
